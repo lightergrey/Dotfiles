@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" prefix="content: http://purl.org/rss/1.0/modules/content/ dc: http://purl.org/dc/terms/ foaf: http://xmlns.com/foaf/0.1/ og: http://ogp.me/ns# rdfs: http://www.w3.org/2000/01/rdf-schema# sioc: http://rdfs.org/sioc/ns# sioct: http://rdfs.org/sioc/types# skos: http://www.w3.org/2004/02/skos/core# xsd: http://www.w3.org/2001/XMLSchema#">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="canonical" href="https://echo.co/blog/os-x-1010-yosemite-local-development-environment-apache-php-and-mysql-homebrew" />
+<link rel="shortlink" href="https://echo.co/node/3195" />
+<meta property="og:site_name" content="Echo &amp; Co." />
+<link rel="shortcut icon" href="https://echo.co/sites/all/themes/ditto/favicon.ico" type="image/vnd.microsoft.icon" />
+<meta property="og:url" content="https://echo.co/blog/os-x-1010-yosemite-local-development-environment-apache-php-and-mysql-homebrew" />
+<meta name="generator" content="Drupal 7 (http://drupal.org)" />
+<meta property="og:title" content="OS X 10.10 Yosemite Local Development Environment: Apache, PHP, and MySQL with Homebrew" />
+<meta name="description" content="OS X 10.10 Yosemite comes with Apache and PHP pre-installed, but it&#039;s not in a great configuration, requires root to make lots of changes, and can introduce issues with file ownership and permissions. We prefer to use Homebrew to avoid these problems and because it&#039;s easier to keep up to date with newer versions of each component and extend customization. We can also set things up to be fully automatic so you can create new websites locally without needing to edit any configuration files." />
+<meta content="OS X 10.10 Yosemite Local Development Environment: Apache, PHP, and MySQL with Homebrew" about="/blog/os-x-1010-yosemite-local-development-environment-apache-php-and-mysql-homebrew" property="dc:title" />
+<meta property="og:description" content="OS X 10.10 Yosemite comes with Apache and PHP pre-installed, but it&#039;s not in a great configuration, requires root to make lots of changes, and can introduce issues with file ownership and permissions. We prefer to use Homebrew to avoid these problems and because it&#039;s easier to keep up to date with newer versions of each component and extend customization. We can also set things up to be fully automatic so you can create new websites locally without needing to edit any configuration files." />
+<meta property="og:type" content="blog" />
+<meta property="og:image" content="https://echo.co/sites/default/files/blog/Yosemite-small.jpg" />
+<meta name="robots" content="noarchive" />
+  <title>OS X 10.10 Yosemite Local Development Environment: Apache, PHP, and MySQL with Homebrew | Echo &amp; Co.</title>
+  <link type="text/css" rel="stylesheet" href="https://echo.co/sites/default/files/css/css_pbm0lsQQJ7A7WCCIMgxLho6mI_kBNgznNUWmTWcnfoE.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://echo.co/sites/default/files/css/css_QAKyx7KqozqFtJb5KdUHGdfxAqI9gSu8g8-rjwlOxMc.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://echo.co/sites/default/files/css/css_pjIJmELo4PpaMxFw5Z1ONhCcyLG60eIUtGnX0jbz384.css" media="screen" />
+<link type="text/css" rel="stylesheet" href="https://echo.co/sites/default/files/css/css_GpoqO1H_YKBzOUVTKzK4d9W18v7xNMiFHpOi_Fjx5zo.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://echo.co/sites/default/files/css/css_GNJyJZIC5AD0LFQB1kl0DdFxUhodOgntlBUO2uOZxhA.css" media="all" />
+<link type="text/css" rel="stylesheet" href="&amp;nl253c" media="all" />
+<link type="text/css" rel="stylesheet" href="https://echo.co/sites/default/files/css/css_hRs-T4D0hfV5cOWOe2O769ai9fxPKzESoMuPPmt1rsM.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://echo.co/sites/default/files/css/css_HNOWR22UJw-Mukl17zcuiXbK48I0bA1V-Zuq8ksujKA.css" media="print" />
+
+<!--[if lt IE 9]>
+<link type="text/css" rel="stylesheet" href="https://echo.co/sites/default/files/css/css_16bc2sForlBf3UY5R98mJ5dFhy8l-YOmzNkz1PkdkFQ.css" media="all" />
+<![endif]-->
+
+<!--[if (gte IE 9)|(gt IEMobile 7)|(!IE)]><!-->
+<link type="text/css" rel="stylesheet" href="https://echo.co/sites/default/files/css/css_tnnkR4KG3J6sdZwNgzZ65WjbkITWMl9h-IKgkF8KgS4.css" media="all" />
+<!--<![endif]-->
+  <script type="text/javascript" src="https://echo.co/sites/default/files/js/js_Or7gQuGeQk8nKUFiaUiLPYCcwmrIB27_M9A3YOMGCuM.js"></script>
+<script type="text/javascript" src="https://echo.co/sites/default/files/js/js_-kbEz_-_tIqZQS-ii7DiupCiX89TE5qdf7Et9HbLthc.js"></script>
+<script type="text/javascript" src="https://echo.co/sites/default/files/js/js_TxAkqVm3dNi8crq4YMAkOc9ZTsmPLVow6KEYAPYk1eA.js"></script>
+<script type="text/javascript" src="https://echo.co/sites/default/files/js/js_703mfRyyMnXtMXGNxET7_Dg__YmK07Dl53RNCsCnfnc.js"></script>
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+<script type="text/javascript" src="https://echo.co/sites/default/files/js/js_z9VBIHy_IdpOft41qaK6SpnC3tlTigZat9lsHo5BMVs.js"></script>
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53a1a013791dce2e"></script>
+<script type="text/javascript" src="https://echo.co/sites/default/files/js/js_IDBX5SzkJ9gGNq7x-qOE_2DZsexqguTJQGMKvi4w-Uw.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var _gaq = _gaq || [];_gaq.push(["_setAccount", "UA-7197599-1"]);_gaq.push(['_setCustomVar', 1, "Author", "Alan Ivey", 3]);_gaq.push(["_trackPageview"]);(function() {var ga = document.createElement("script");ga.type = "text/javascript";ga.async = true;ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";var s = document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga, s);})();
+//--><!]]>
+</script>
+<script type="text/javascript" src="https://echo.co/sites/default/files/js/js_fUlsKWfBVdfNlBA_uniUmLr1C1Ci8prdtToQp85EOpA.js"></script>
+<script type="text/javascript" src="https://echo.co/sites/default/files/js/js_G5vAvkHa5-RTbFe_SWRtWMymHROF-JazyaLh7cwFaoo.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+jQuery.extend(Drupal.settings, {"basePath":"\/","pathPrefix":"","ajaxPageState":{"theme":"ditto","theme_token":"NnkMmuALJ9JRfsdjPvwW9_k9lrKbfgZJK9S49TxWh0E","js":{"misc\/jquery.js":1,"misc\/jquery.once.js":1,"misc\/drupal.js":1,"sites\/all\/libraries\/fitvids\/jquery.fitvids.js":1,"misc\/jquery.cookie.js":1,"sites\/all\/modules\/waypoints\/waypoints.min.js":1,"sites\/all\/modules\/comment_notify\/comment_notify.js":1,"sites\/all\/modules\/fitvids\/fitvids.js":1,"sites\/all\/modules\/resp_img\/resp_img.js":1,"sites\/all\/libraries\/colorbox\/jquery.colorbox-min.js":1,"sites\/all\/modules\/colorbox\/js\/colorbox.js":1,"sites\/all\/modules\/panels\/js\/panels.js":1,"sites\/all\/libraries\/jstorage\/jstorage.min.js":1,"sites\/all\/modules\/extlink\/extlink.js":1,"https:\/\/apis.google.com\/js\/plusone.js":1,"sites\/all\/modules\/service_links\/js\/google_plus_one.js":1,"\/\/s7.addthis.com\/js\/300\/addthis_widget.js#pubid=ra-53a1a013791dce2e":1,"sites\/all\/modules\/google_analytics\/googleanalytics.js":1,"0":1,"sites\/all\/modules\/field_group\/field_group.js":1,"sites\/all\/modules\/disqus\/disqus.js":1,"sites\/all\/themes\/ditto\/js\/build\/modernizr.js":1,"sites\/all\/themes\/ditto\/js\/appendAround.js":1,"sites\/all\/themes\/ditto\/js\/script.js":1,"sites\/all\/themes\/ditto\/js\/disqus-fix.js":1,"sites\/all\/themes\/ditto\/js\/footnote-links.js":1,"sites\/all\/themes\/ditto\/ditto_colorbox\/colorbox_dittobox.js":1},"css":{"modules\/system\/system.base.css":1,"modules\/system\/system.menus.css":1,"modules\/system\/system.messages.css":1,"modules\/system\/system.theme.css":1,"sites\/all\/modules\/comment_notify\/comment_notify.css":1,"modules\/comment\/comment.css":1,"sites\/all\/modules\/date\/date_api\/date.css":1,"modules\/field\/theme\/field.css":1,"sites\/all\/modules\/fitvids\/fitvids.css":1,"sites\/all\/modules\/mobile_menu_toggle\/mobile_menu_toggle.css":1,"modules\/node\/node.css":1,"modules\/search\/search.css":1,"modules\/user\/user.css":1,"sites\/all\/modules\/views\/css\/views.css":1,"sites\/all\/modules\/ctools\/css\/ctools.css":1,"sites\/all\/modules\/geshifilter\/geshifilter.css":1,"sites\/all\/modules\/panels\/css\/panels.css":1,"sites\/all\/modules\/extlink\/extlink.css":1,"sites\/all\/modules\/field_group\/field_group.css":1,"sites\/all\/themes\/ditto\/ds_layouts\/two_column__2575\/two_column__2575.css":1,"sites\/all\/themes\/ditto\/http:\/\/fonts.googleapis.com\/css?family=Droid+Sans+Mono|Droid+Serif:400,400italic":1,"sites\/all\/themes\/ditto\/\/sass\/partials\/blocks\/_block--colorbox_dittobox.scss":1,"sites\/all\/themes\/ditto\/css\/print.css":1,"sites\/all\/themes\/ditto\/css\/old-ie.css":1,"sites\/all\/themes\/ditto\/css\/styles.css":1}},"colorbox":{"transition":"fade","speed":"200","opacity":"0.80","slideshow":false,"slideshowAuto":true,"slideshowSpeed":"2500","slideshowStart":"start slideshow","slideshowStop":"stop slideshow","current":"{current} of {total}","previous":"\u00ab Prev","next":"Next \u00bb","close":"Close","overlayClose":true,"maxWidth":"","maxHeight":"","initialWidth":"","initialHeight":"","fixed":true,"scrolling":false,"mobiledetect":true,"mobiledevicewidth":"480px"},"respImg":{"default_suffix":"__mobile","current_suffix":false,"forceRedirect":"0","forceResize":"1","reloadOnResize":"0","useDevicePixelRatio":0,"suffixes":{"__normal":980,"__narrow":740,"__mobile":1}},"extlink":{"extTarget":"_blank","extClass":0,"extSubdomains":1,"extExclude":"","extInclude":"","extAlert":0,"extAlertText":"This link will take you to an external web site. We are not responsible for their content.","mailtoClass":0},"ws_gpo":{"type":"small","counter":false},"fitvids":{"custom_domains":[],"selectors":["body"],"simplifymarkup":true},"googleanalytics":{"trackOutbound":1,"trackMailto":1,"trackDownload":1,"trackDownloadExtensions":"7z|aac|arc|arj|asf|asx|avi|bin|csv|doc|exe|flv|gif|gz|gzip|hqx|jar|jpe?g|js|mp(2|3|4|e?g)|mov(ie)?|msi|msp|pdf|phps|png|ppt|qtm?|ra(m|r)?|sea|sit|tar|tgz|torrent|txt|wav|wma|wmv|wpd|xls|xml|z|zip"},"field_group":{"div":"full","html-element":"full"},"disqusComments":"echoditto","disqus":{"domain":"echoditto","url":"https:\/\/echo.co\/blog\/os-x-1010-yosemite-local-development-environment-apache-php-and-mysql-homebrew","title":"OS X 10.10 Yosemite Local Development Environment: Apache, PHP, and MySQL with Homebrew","identifier":"node\/3195"}});
+//--><!]]>
+</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+</head>
+<body class="html not-front not-logged-in no-sidebars page-node page-node- page-node-3195 node-type-blog role-anonymous-user with-subnav page-blog-os-x-1010-yosemite-local-development-environment-apache-php-and-mysql-homebrew section-blog" >
+  <div id="skip">
+    <a href="#main-menu">Jump to Navigation</a>
+  </div>
+    <div id="page" class="page main--page ">
+
+  <!-- ______________________ HEADER _______________________ -->
+  <div id="menu--fixed" class="menu--fixed"><div class='inside-constrained'><a class='logo--white--small' href='/'><span class='visuallyhidden'>Echo Ditto</span></a></div></div>
+  <header id="header" class="main--header">
+    <div class="main--header--inside inside-constrained">
+      <a href="/" class="main--logo" title="Home" rel="home" id="logo"></a>
+
+            <div class="region--header">
+          <div class="menu--dashboard">
+            <span id="menu--trigger" class="menu--trigger is-out">menu</span>
+          </div>
+          <div class="region region-header">
+    <div id="block-block-1" class="block block-block block--social-media block-odd first clearfix">
+  <div class="block-inner">
+
+            
+
+    <div class="content" >
+       <a href="https://twitter.com/echoandcompany" class="social-icon twitter ir" title="Find us on Twitter">Twitter</a>
+<a href="https://www.facebook.com/echoandcompany" class="social-icon facebook ir" title="Like us on Facebook">Facebook</a>
+<a href="https://plus.google.com/+EchoDitto" class="social-icon google ir" title="Find us on Google Plus">Google Plus</a>
+<a href="/blog/feed" class="social-icon rss ir" title="Add us to your RSS feed">RSS</a>
+<a href="/hire-us" target="_top" class="social-icon email ir" title="Contact us">Email</a>
+     </div>
+
+  </div>
+</div> <!-- /block-inner /block --><div id="block-system-main-menu" class="block block-system menu--main block-menu block-even clearfix">
+  <div class="block-inner">
+
+            
+
+    <div class="content" >
+      <ul class="menu"><li class="first leaf work mid-600"><a href="/our-work">Work</a></li>
+<li class="collapsed services mid-591"><a href="/services">Services</a></li>
+<li class="leaf blog mid-585"><a href="/blog">Blog</a></li>
+<li class="collapsed team mid-586"><a href="/team">Team</a></li>
+<li class="leaf careers mid-1635"><a href="/team/careers">Careers</a></li>
+<li class="last leaf hire-us- mid-1397"><a href="/hire-us" class="highlighted">Hire Us!</a></li>
+</ul>    </div>
+
+  </div>
+</div> <!-- /block-inner /block -->  </div>
+
+        <div class="region--offcanvas">
+                            </div>
+      </div>
+          </div>
+  </header> <!-- /header -->
+
+  <div id="waypoints-trigger"></div>
+
+
+<!-- ______________________ MAIN _______________________ -->
+<div class="print-logo"></div>
+
+<div id="main" class="main--main">
+  <div class="main--main--inside inside-constrained">
+
+     <!-- /leftrail -->
+
+  <section id="content" class="main--content">
+
+        <div id="content-header" class="main--content--header">
+
+      <!-- <h2 class="element-invisible">You are here</h2><div class="breadcrumb"><a href="/">Home</a></div> -->
+
+      
+            <h1 class="page-title">OS X 10.10 Yosemite Local Development Environment: Apache, PHP, and MySQL with Homebrew</h1>
+    
+            
+        <div class="tabs"></div>
+  
+  
+</div> <!-- /#content-header -->
+  <div id="content-area" class="region--content">
+      <div class="region region-content">
+    <div id="block-system-main" class="block block-system block-odd first clearfix">
+  <div class="block-inner">
+
+            
+
+    <div class="content" >
+      <div  about="/blog/os-x-1010-yosemite-local-development-environment-apache-php-and-mysql-homebrew" typeof="sioc:Item foaf:Document" class="node node-blog node-odd view-mode-full clearfix">
+
+  <!-- Needed to activate contextual links -->
+  
+    <div class="ds-top">
+          </div>
+
+    <div class="ds-body">
+      <div class="ds-left">
+        <div class="field field-name-ds-user-picture field-type-ds field-label-hidden"><div class="field-items"><div class="field-item even"><a href="/users/alan-ivey"><img typeof="foaf:Image" src="https://echo.co/sites/default/files/styles/author_circle/public/pictures/picture-78-1404923657.png?itok=ieIUkOaw"   alt="Alan Ivey&#039;s picture" title="Alan Ivey&#039;s picture" /></a></div></div></div><div class="field field-name-append-author-desktop field-type-ds field-label-hidden"><div class="field-items"><div class="field-item even"> <div class="append--author--desktop" data-set="append-author"></div> </div></div></div><p class="text--role"> <div class="job-title">Senior Systems Administrator</div> </p><div class="field field-name-addthis-append-desktop field-type-ds field-label-hidden"><div class="field-items"><div class="field-item even"> <div class="append--addthis--desktop" data-set="append-addthis"></div> </div></div></div><div class="field field-name-append-tags-desktop field-type-ds field-label-hidden"><div class="field-items"><div class="field-item even"> <div class="append--tags--desktop" data-set="append-tags"></div> </div></div></div>      </div>
+
+      <div class="ds-right">
+        <p class="field--breadcrumb"> <a class="breadcrumb--back" href="/blog">Blog</a> </p><div class="field field-name-title field-type-ds field-label-hidden"><div class="field-items"><div class="field-item even" property="dc:title"><h2 class="title">OS X 10.10 Yosemite Local Development Environment: Apache, PHP, and MySQL with Homebrew</h2></div></div></div><div id="node-blog-full-group-post-meta" class=" group-post-meta field-group-div"><p class="text--date">Dec 22, 2014</p><span class="append--author--mobile" data-set="append-author"><p class="text--author"><a href="/users/alan-ivey" title="View user profile." class="username" xml:lang="" about="/users/alan-ivey" typeof="sioc:UserAccount" property="foaf:name" datatype="">Alan Ivey</a></p></span></div><div id="node-blog-full-group-post-actions" class="group--post-actions group-post-actions field-group-div"><ul class="links inline"><li class="disqus_comments_num first last active"><a href="/blog/os-x-1010-yosemite-local-development-environment-apache-php-and-mysql-homebrew#disqus_thread" data-disqus-identifier="node/3195" class="active">Disqus Comments Count!</a></li>
+</ul></div><div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even" property="content:encoded"><p>OS X 10.10 Yosemite comes with Apache and PHP pre-installed, but it's not in a great configuration, requires root to make lots of changes, and can introduce issues with file ownership and permissions. We prefer to use Homebrew to avoid these problems and because it's easier to keep up to date with newer versions of each component and extend customization. We can also set things up to be fully automatic so you can create new websites locally without needing to edit any configuration files.</p>
+
+<p>With the arrival of Yosemite, some of the changes previously used in <a href="/blog/os-x-109-local-development-environment-apache-php-and-mysql-homebrew">10.9 for setting up Apache, PHP, and MySQL with Homebrew</a> don't work quite the same. This guide will walk you through using <a href="http://brew.sh/">Homebrew</a> to install Apache, PHP, and MySQL for a "MAMP" development environment. We'll also use DNSMasq and Apache's VirtualDocumentRoot to set up "auto-VirtualHosts" so you don't need to edit configuration files when starting new projects. Finally, we'll add a firewall rule to allow the default http port 80 to be used without running Apache as root.</p>
+
+<p>The following steps are intended for use on a Yosemite system without any previous attempts to use Homebrew for Apache, PHP, or MySQL. If you have attempted to install a similar stack and run into conflicts, or you've upgraded your operating system from 10.9 and things broke, the final section has some troubleshooting pointers. If that fails, leave a comment and I'll try my best to help you out.</p>
+
+<p>At the conclusion of this guide, you'll be able to create a directory like <em>~/Sites/project</em> and access it immediately at <em>http://project.dev</em> without editing your <em>/etc/hosts</em> file or editing any Apache configuration. We'll configure PHP and MySQL to allow for enough flexibility for development.</p>
+
+<p>Because some of the commands span several lines, each command will be in a separate code block. This means you should copy and paste each code block in its entirety as a single command.</p>
+
+<p>Before diving in, yes, this is a lot of steps. You can do it faster and pay money for something like MAMP Pro, but this is more fun, and you may learn something along the way! And, while you can simplify things with <a href="http://www.vagrantup.com/">Vagrant</a> or other virtual machine format, some people prefer to run things on "bare metal" and not have the overhead of a virtual machine.</p>
+
+<h1>Homebrew Setup</h1>
+
+<p>If you've not already installed Homebrew, you can follow the instructions at <a href="http://brew.sh/">http://brew.sh</a>. I used to include the command in previous walkthrough blogs, but it could change after posting, so definitely check their website to install it properly.</p>
+
+<p>If you do not have <strong>git</strong> available on your system, either from Homebrew, Xcode, or another source, you can install it with Homebrew now (if you already have it installed, feel free to skip this step to keep the version of <strong>git</strong> you already have):</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;">brew <span style="color: #c20cb9; font-weight: bold;">install</span> <span style="color: #660033;">-v</span> <span style="color: #c20cb9; font-weight: bold;">git</span></pre></div>
+
+<h1>PATH Variable</h1>
+
+<p>In previous guides on 10.9 and earlier, I added a change to <strong>$PATH</strong> in <em>~/.bash_profile</em> to ensure that Homebrew-installed applications would run by default over similar ones that were already installed on OS X. Thankfully, Yosemite's <strong>$PATH</strong> order is different than earlier OS versions and now includes the default Homebrew location of <em>/usr/local/bin</em> in front. If you installed Homebrew to a custom location, or are not seeing <em>/usr/local/bin</em> at the beginning of your shell's <strong>$PATH</strong>, check out the file <em>/etc/paths</em> or the directory <em>/etc/paths.d/</em>.</p>
+
+<h1>MySQL</h1>
+
+<p>Install MySQL with Homebrew:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;">brew <span style="color: #c20cb9; font-weight: bold;">install</span> <span style="color: #660033;">-v</span> mysql</pre></div>
+
+<p>Copy the default <em>my-default.cnf</em> file to the MySQL Homebrew Cellar directory where it will be loaded on application start:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #c20cb9; font-weight: bold;">cp</span> <span style="color: #660033;">-v</span> $<span style="color: #7a0874; font-weight: bold;">&#40;</span>brew <span style="color: #660033;">--prefix</span> mysql<span style="color: #7a0874; font-weight: bold;">&#41;</span><span style="color: #000000; font-weight: bold;">/</span>support-files<span style="color: #000000; font-weight: bold;">/</span>my-default.cnf $<span style="color: #7a0874; font-weight: bold;">&#40;</span>brew --prefix<span style="color: #7a0874; font-weight: bold;">&#41;</span><span style="color: #000000; font-weight: bold;">/</span>etc<span style="color: #000000; font-weight: bold;">/</span>my.cnf</pre></div>
+
+<p>This will configure MySQL to allow for the maximum packet size, only appropriate for a local or development server. Also, we'll keep each InnoDB table in separate files to keep <em>ibdataN</em>-type file sizes low and make file-based backups, like Time Machine, easier to manage multiple small files instead of a few large InnoDB data files. This is the first of many multi-line single commands. The following is a single, multi-line command; copy and paste the entire block at once:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #c20cb9; font-weight: bold;">cat</span> <span style="color: #000000; font-weight: bold;">&gt;&gt;</span> $<span style="color: #7a0874; font-weight: bold;">&#40;</span>brew --prefix<span style="color: #7a0874; font-weight: bold;">&#41;</span><span style="color: #000000; font-weight: bold;">/</span>etc<span style="color: #000000; font-weight: bold;">/</span>my.cnf <span style="color: #cc0000; font-style: italic;">&lt;&lt;'EOF'
+&nbsp;
+# Echo &amp; Co. changes
+max_allowed_packet = 1073741824
+innodb_file_per_table = 1
+EOF</span></pre></div>
+
+<p>Uncomment the sample option for <strong>innodb_buffer_pool_size</strong> to improve performance:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #c20cb9; font-weight: bold;">sed</span> <span style="color: #660033;">-i</span> <span style="color: #ff0000;">''</span> <span style="color: #ff0000;">'s/^#[[:space:]]*\(innodb_buffer_pool_size\)/\1/'</span> $<span style="color: #7a0874; font-weight: bold;">&#40;</span>brew --prefix<span style="color: #7a0874; font-weight: bold;">&#41;</span><span style="color: #000000; font-weight: bold;">/</span>etc<span style="color: #000000; font-weight: bold;">/</span>my.cnf</pre></div>
+
+<p>Now we need to start MySQL using OS X's launchd. This used to be an involved process with <strong>launchctl</strong> commands, but now we can leverage the excellent <strong><a href="https://github.com/Homebrew/homebrew-services">brew services</a></strong> command:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;">brew tap homebrew<span style="color: #000000; font-weight: bold;">/</span>services</pre></div>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;">brew services start mysql</pre></div>
+
+<p>By default, MySQL's root user has an empty password from any connection. You are advised to run <strong>mysql_secure_installation</strong> and at least set a password for the root user:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #666666;">$</span><span style="color: #7a0874; font-weight: bold;">&#40;</span>brew <span style="color: #660033;">--prefix</span> mysql<span style="color: #7a0874; font-weight: bold;">&#41;</span><span style="color: #000000; font-weight: bold;">/</span>bin<span style="color: #000000; font-weight: bold;">/</span>mysql_secure_installation</pre></div>
+
+<h1>Apache</h1>
+
+<p>Start by stopping the built-in Apache, if it's running, and prevent it from starting on boot. This is one of very few times you'll need to use <strong>sudo</strong>:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #c20cb9; font-weight: bold;">sudo</span> launchctl unload <span style="color: #000000; font-weight: bold;">/</span>System<span style="color: #000000; font-weight: bold;">/</span>Library<span style="color: #000000; font-weight: bold;">/</span>LaunchDaemons<span style="color: #000000; font-weight: bold;">/</span>org.apache.httpd.plist <span style="color: #000000;">2</span><span style="color: #000000; font-weight: bold;">&gt;/</span>dev<span style="color: #000000; font-weight: bold;">/</span>null</pre></div>
+
+<p>The formula for building Apache is not in the default Homebrew repository that you get by installing Homebrew. While we can use the format of <strong>brew install external-repo/formula</strong>, if an external formula relies on another external formula, you have to use the <strong>brew tap</strong> command first. I know, it's weird. So, we need to tap homebrew-dupes because "homebrew-apache/httpd22" relies on "homebrew-dupes/zlib". Whew:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;">brew tap homebrew<span style="color: #000000; font-weight: bold;">/</span>dupes</pre></div>
+
+<p>A slight deviation from my prior walkthroughs: we'll install Apache 2.2 with the event MPM and set up PHP-FPM instead of mod_php. If those terms mean anything to you and you're curious as to why I decided to go this route; it's because: 1) switching PHP versions is far easier with PHP-FPM and the default 9000 port instead of also editing the Apache configuration to switch the mod_php module location, and 2) if we're therefore not using mod_php, we don't have to use the prefork MPM and can get better performance with event or worker. As to why I'm using 2.2 instead of 2.4, popular FOSS projects like Drupal and WordPress still ship with 2.2-style .htaccess files. Using 2.4 sometimes means you have to set up "compat" modules, and that's above the requirement for a local environment, in my opinion.</p>
+
+<p>Onward! Let's install Apache 2.2 with the event MPM, and we'll use Homebrew's OpenSSL library since it's more up-to-date than OS X's:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;">brew <span style="color: #c20cb9; font-weight: bold;">install</span> <span style="color: #660033;">-v</span> homebrew<span style="color: #000000; font-weight: bold;">/</span>apache<span style="color: #000000; font-weight: bold;">/</span>httpd22 <span style="color: #660033;">--with-brewed-openssl</span> <span style="color: #660033;">--with-mpm-event</span></pre></div>
+
+<p>In order to get Apache and PHP to communicate via PHP-FPM, we'll install the mod_fastcgi module:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;">brew <span style="color: #c20cb9; font-weight: bold;">install</span> <span style="color: #660033;">-v</span> homebrew<span style="color: #000000; font-weight: bold;">/</span>apache<span style="color: #000000; font-weight: bold;">/</span>mod_fastcgi <span style="color: #660033;">--with-brewed-httpd22</span></pre></div>
+
+<p>To prevent any potential problems with previous mod_fastcgi setups, let's remove all references to the mod_fastcgi module (we'll re-add the new version later):</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #c20cb9; font-weight: bold;">sed</span> <span style="color: #660033;">-i</span> <span style="color: #ff0000;">''</span> <span style="color: #ff0000;">'/fastcgi_module/d'</span> $<span style="color: #7a0874; font-weight: bold;">&#40;</span>brew --prefix<span style="color: #7a0874; font-weight: bold;">&#41;</span><span style="color: #000000; font-weight: bold;">/</span>etc<span style="color: #000000; font-weight: bold;">/</span>apache2<span style="color: #000000; font-weight: bold;">/</span><span style="color: #000000;">2.2</span><span style="color: #000000; font-weight: bold;">/</span>httpd.conf</pre></div>
+
+<p>Add the logic for Apache to send PHP to PHP-FPM with mod_fastcgi, and reference that we'll want to use the file <em>~/Sites/httpd-vhosts.conf</em> to configure our VirtualHosts. The parenthesis are used to <a href="http://stackoverflow.com/a/10856211/534275">run the command in a subprocess</a>, so that the <strong>export</strong>ed variables don't persist in your terminal session afterwards. Also, you'll see <strong>export USERHOME</strong> a few times in this guide; I look up the full path for your user home directory from the operating system wherever a full path is needed in a configuration file and "<em>~</em>" or a literal "<em>$HOME</em>" would not work.</p>
+
+<p>This is all one command, so copy and paste the entire code block at once:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">&#40;</span><span style="color: #7a0874; font-weight: bold;">export</span> <span style="color: #007800;">USERHOME</span>=$<span style="color: #7a0874; font-weight: bold;">&#40;</span>dscl . <span style="color: #660033;">-read</span> <span style="color: #000000; font-weight: bold;">/</span>Users<span style="color: #000000; font-weight: bold;">/`</span><span style="color: #c20cb9; font-weight: bold;">whoami</span><span style="color: #000000; font-weight: bold;">`</span> NFSHomeDirectory <span style="color: #000000; font-weight: bold;">|</span> <span style="color: #c20cb9; font-weight: bold;">awk</span> <span style="color: #660033;">-F</span><span style="color: #ff0000;">&quot;\: &quot;</span> <span style="color: #ff0000;">'{print $2}'</span><span style="color: #7a0874; font-weight: bold;">&#41;</span> ; <span style="color: #7a0874; font-weight: bold;">export</span> <span style="color: #007800;">MODFASTCGIPREFIX</span>=$<span style="color: #7a0874; font-weight: bold;">&#40;</span>brew <span style="color: #660033;">--prefix</span> mod_fastcgi<span style="color: #7a0874; font-weight: bold;">&#41;</span> ; <span style="color: #c20cb9; font-weight: bold;">cat</span> <span style="color: #000000; font-weight: bold;">&gt;&gt;</span> $<span style="color: #7a0874; font-weight: bold;">&#40;</span>brew --prefix<span style="color: #7a0874; font-weight: bold;">&#41;</span><span style="color: #000000; font-weight: bold;">/</span>etc<span style="color: #000000; font-weight: bold;">/</span>apache2<span style="color: #000000; font-weight: bold;">/</span><span style="color: #000000;">2.2</span><span style="color: #000000; font-weight: bold;">/</span>httpd.conf <span style="color: #cc0000; font-style: italic;">&lt;&lt;EOF
+&nbsp;
+# Echo &amp; Co. changes
+&nbsp;
+# Load PHP-FPM via mod_fastcgi
+LoadModule fastcgi_module    ${MODFASTCGIPREFIX}/libexec/mod_fastcgi.so
+&nbsp;
+&lt;IfModule fastcgi_module&gt;
+  FastCgiConfig -maxClassProcesses 1 -idle-timeout 1500
+&nbsp;
+  # Prevent accessing FastCGI alias paths directly
+  &lt;LocationMatch &quot;^/fastcgi&quot;&gt;
+    &lt;IfModule mod_authz_core.c&gt;
+      Require env REDIRECT_STATUS
+    &lt;/IfModule&gt;
+    &lt;IfModule !mod_authz_core.c&gt;
+      Order Deny,Allow
+      Deny from All
+      Allow from env=REDIRECT_STATUS
+    &lt;/IfModule&gt;
+  &lt;/LocationMatch&gt;
+&nbsp;
+  FastCgiExternalServer /php-fpm -host 127.0.0.1:9000 -pass-header Authorization -idle-timeout 1500
+  ScriptAlias /fastcgiphp /php-fpm
+  Action php-fastcgi /fastcgiphp
+&nbsp;
+  # Send PHP extensions to PHP-FPM
+  AddHandler php-fastcgi .php
+&nbsp;
+  # PHP options
+  AddType text/html .php
+  AddType application/x-httpd-php .php
+  DirectoryIndex index.php index.html
+&lt;/IfModule&gt;
+&nbsp;
+# Include our VirtualHosts
+Include ${USERHOME}/Sites/httpd-vhosts.conf
+EOF</span>
+<span style="color: #7a0874; font-weight: bold;">&#41;</span></pre></div>
+
+<p>We'll be using the file <em>~/Sites/httpd-vhosts.conf</em> to configure our VirtualHosts, but the <em>~/Sites</em> folder doesn't exist by default in newer versions of OS X. We'll also create folders for logs and SSL files:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #c20cb9; font-weight: bold;">mkdir</span> <span style="color: #660033;">-pv</span> ~<span style="color: #000000; font-weight: bold;">/</span>Sites<span style="color: #000000; font-weight: bold;">/</span><span style="color: #7a0874; font-weight: bold;">&#123;</span>logs,ssl<span style="color: #7a0874; font-weight: bold;">&#125;</span></pre></div>
+
+<p>Let's populate the <em>~/Sites/httpd-vhosts.conf</em> file. The biggest difference from my previous guides are that you'll see the port numbers are 8080/8443 instead of 80/443. OS X 10.9 and earlier had the <strong>ipfw</strong> firewall which allowed for port redirecting, so we would send port 80 traffic "directly" to our Apache. But <strong>ipfw</strong> is now removed and replaced by <strong>pf</strong> which "forwards" traffic to another port. We'll get to that later, but know that "8080" and "8443" are not typos but are acceptable because of later port forwarding. Also, I've now added a basic SSL configuration (though you'll need to acknowledge warnings in your browser about self-signed certificates):</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #c20cb9; font-weight: bold;">touch</span> ~<span style="color: #000000; font-weight: bold;">/</span>Sites<span style="color: #000000; font-weight: bold;">/</span>httpd-vhosts.conf</pre></div>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">&#40;</span><span style="color: #7a0874; font-weight: bold;">export</span> <span style="color: #007800;">USERHOME</span>=$<span style="color: #7a0874; font-weight: bold;">&#40;</span>dscl . <span style="color: #660033;">-read</span> <span style="color: #000000; font-weight: bold;">/</span>Users<span style="color: #000000; font-weight: bold;">/`</span><span style="color: #c20cb9; font-weight: bold;">whoami</span><span style="color: #000000; font-weight: bold;">`</span> NFSHomeDirectory <span style="color: #000000; font-weight: bold;">|</span> <span style="color: #c20cb9; font-weight: bold;">awk</span> <span style="color: #660033;">-F</span><span style="color: #ff0000;">&quot;\: &quot;</span> <span style="color: #ff0000;">'{print $2}'</span><span style="color: #7a0874; font-weight: bold;">&#41;</span> ; <span style="color: #c20cb9; font-weight: bold;">cat</span> <span style="color: #000000; font-weight: bold;">&gt;</span> ~<span style="color: #000000; font-weight: bold;">/</span>Sites<span style="color: #000000; font-weight: bold;">/</span>httpd-vhosts.conf <span style="color: #cc0000; font-style: italic;">&lt;&lt;EOF
+#
+# Listening ports.
+#
+#Listen 8080  # defined in main httpd.conf
+Listen 8443
+&nbsp;
+#
+# Use name-based virtual hosting.
+#
+NameVirtualHost *:8080
+NameVirtualHost *:8443
+&nbsp;
+#
+# Set up permissions for VirtualHosts in ~/Sites
+#
+&lt;Directory &quot;${USERHOME}/Sites&quot;&gt;
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride All
+    &lt;IfModule mod_authz_core.c&gt;
+        Require all granted
+    &lt;/IfModule&gt;
+    &lt;IfModule !mod_authz_core.c&gt;
+        Order allow,deny
+        Allow from all
+    &lt;/IfModule&gt;
+&lt;/Directory&gt;
+&nbsp;
+# For http://localhost in the users' Sites folder
+&lt;VirtualHost _default_:8080&gt;
+    ServerName localhost
+    DocumentRoot &quot;${USERHOME}/Sites&quot;
+&lt;/VirtualHost&gt;
+&lt;VirtualHost _default_:8443&gt;
+    ServerName localhost
+    Include &quot;${USERHOME}/Sites/ssl/ssl-shared-cert.inc&quot;
+    DocumentRoot &quot;${USERHOME}/Sites&quot;
+&lt;/VirtualHost&gt;
+&nbsp;
+#
+# VirtualHosts
+#
+&nbsp;
+## Manual VirtualHost template for HTTP and HTTPS
+#&lt;VirtualHost *:8080&gt;
+#  ServerName project.dev
+#  CustomLog &quot;${USERHOME}/Sites/logs/project.dev-access_log&quot; combined
+#  ErrorLog &quot;${USERHOME}/Sites/logs/project.dev-error_log&quot;
+#  DocumentRoot &quot;${USERHOME}/Sites/project.dev&quot;
+#&lt;/VirtualHost&gt;
+#&lt;VirtualHost *:8443&gt;
+#  ServerName project.dev
+#  Include &quot;${USERHOME}/Sites/ssl/ssl-shared-cert.inc&quot;
+#  CustomLog &quot;${USERHOME}/Sites/logs/project.dev-access_log&quot; combined
+#  ErrorLog &quot;${USERHOME}/Sites/logs/project.dev-error_log&quot;
+#  DocumentRoot &quot;${USERHOME}/Sites/project.dev&quot;
+#&lt;/VirtualHost&gt;
+&nbsp;
+#
+# Automatic VirtualHosts
+#
+# A directory at ${USERHOME}/Sites/webroot can be accessed at http://webroot.dev
+# In Drupal, uncomment the line with: RewriteBase /
+#
+&nbsp;
+# This log format will display the per-virtual-host as the first field followed by a typical log line
+LogFormat &quot;%V %h %l %u %t \&quot;%r\&quot; %&gt;s %b \&quot;%{Referer}i\&quot; \&quot;%{User-Agent}i\&quot;&quot; combinedmassvhost
+&nbsp;
+# Auto-VirtualHosts with .dev
+&lt;VirtualHost *:8080&gt;
+  ServerName dev
+  ServerAlias *.dev
+&nbsp;
+  CustomLog &quot;${USERHOME}/Sites/logs/dev-access_log&quot; combinedmassvhost
+  ErrorLog &quot;${USERHOME}/Sites/logs/dev-error_log&quot;
+&nbsp;
+  VirtualDocumentRoot ${USERHOME}/Sites/%-2+
+&lt;/VirtualHost&gt;
+&lt;VirtualHost *:8443&gt;
+  ServerName dev
+  ServerAlias *.dev
+  Include &quot;${USERHOME}/Sites/ssl/ssl-shared-cert.inc&quot;
+&nbsp;
+  CustomLog &quot;${USERHOME}/Sites/logs/dev-access_log&quot; combinedmassvhost
+  ErrorLog &quot;${USERHOME}/Sites/logs/dev-error_log&quot;
+&nbsp;
+  VirtualDocumentRoot ${USERHOME}/Sites/%-2+
+&lt;/VirtualHost&gt;
+EOF</span>
+<span style="color: #7a0874; font-weight: bold;">&#41;</span></pre></div>
+
+<p>You may have noticed that <em>~/Sites/ssl/ssl-shared-cert.inc</em> is included multiple times; create that file and the SSL files it needs:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">&#40;</span><span style="color: #7a0874; font-weight: bold;">export</span> <span style="color: #007800;">USERHOME</span>=$<span style="color: #7a0874; font-weight: bold;">&#40;</span>dscl . <span style="color: #660033;">-read</span> <span style="color: #000000; font-weight: bold;">/</span>Users<span style="color: #000000; font-weight: bold;">/`</span><span style="color: #c20cb9; font-weight: bold;">whoami</span><span style="color: #000000; font-weight: bold;">`</span> NFSHomeDirectory <span style="color: #000000; font-weight: bold;">|</span> <span style="color: #c20cb9; font-weight: bold;">awk</span> <span style="color: #660033;">-F</span><span style="color: #ff0000;">&quot;\: &quot;</span> <span style="color: #ff0000;">'{print $2}'</span><span style="color: #7a0874; font-weight: bold;">&#41;</span> ; <span style="color: #c20cb9; font-weight: bold;">cat</span> <span style="color: #000000; font-weight: bold;">&gt;</span> ~<span style="color: #000000; font-weight: bold;">/</span>Sites<span style="color: #000000; font-weight: bold;">/</span>ssl<span style="color: #000000; font-weight: bold;">/</span>ssl-shared-cert.inc <span style="color: #cc0000; font-style: italic;">&lt;&lt;EOF
+SSLEngine On
+SSLProtocol all -SSLv2 -SSLv3
+SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW
+SSLCertificateFile &quot;${USERHOME}/Sites/ssl/selfsigned.crt&quot;
+SSLCertificateKeyFile &quot;${USERHOME}/Sites/ssl/private.key&quot;
+EOF</span>
+<span style="color: #7a0874; font-weight: bold;">&#41;</span></pre></div>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;">openssl req \
+  <span style="color: #660033;">-new</span> \
+  <span style="color: #660033;">-newkey</span> rsa:<span style="color: #000000;">2048</span> \
+  <span style="color: #660033;">-days</span> <span style="color: #000000;">3650</span> \
+  <span style="color: #660033;">-nodes</span> \
+  <span style="color: #660033;">-x509</span> \
+  <span style="color: #660033;">-subj</span> <span style="color: #ff0000;">&quot;/C=US/ST=State/L=City/O=Organization/OU=<span style="color: #007800;">$(whoami)</span>/CN=*.dev&quot;</span> \
+  <span style="color: #660033;">-keyout</span> ~<span style="color: #000000; font-weight: bold;">/</span>Sites<span style="color: #000000; font-weight: bold;">/</span>ssl<span style="color: #000000; font-weight: bold;">/</span>private.key \
+  <span style="color: #660033;">-out</span> ~<span style="color: #000000; font-weight: bold;">/</span>Sites<span style="color: #000000; font-weight: bold;">/</span>ssl<span style="color: #000000; font-weight: bold;">/</span>selfsigned.crt</pre></div>
+
+<h2>Start Apache</h2>
+
+<p>Start Homebrew's Apache and set to start on login:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;">brew services start httpd22</pre></div>
+
+<h2>Run with port 80</h2>
+
+<p>You may notice that <em>httpd.conf</em> is running Apache on ports <strong>8080</strong> and <strong>8443</strong>. Manually adding ":8080" each time you're referencing your dev sites is no fun, but running Apache on port 80 requires root. The next two commands will create and load a firewall rule to forward port 80 requests to 8080, and port 443 requests to 8443. The end result is that we don't need to add the port number when visiting a project dev site, like "http://projectname.dev/" instead of "http://projectname.dev:8080/".</p>
+
+<p>The following command will create the file <em>/Library/LaunchDaemons/co.echo.httpdfwd.plist</em> as root, and owned by root, since it needs elevated privileges:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #c20cb9; font-weight: bold;">sudo</span> <span style="color: #c20cb9; font-weight: bold;">bash</span> <span style="color: #660033;">-c</span> <span style="color: #ff0000;">'export TAB=$'</span><span style="color: #ff0000;">&quot;'&quot;</span><span style="color: #ff0000;">'\t'</span><span style="color: #ff0000;">&quot;'&quot;</span><span style="color: #ff0000;">'
+cat &gt; /Library/LaunchDaemons/co.echo.httpdfwd.plist &lt;&lt;EOF
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+&lt;plist version=&quot;1.0&quot;&gt;
+&lt;dict&gt;
+${TAB}&lt;key&gt;Label&lt;/key&gt;
+${TAB}&lt;string&gt;co.echo.httpdfwd&lt;/string&gt;
+${TAB}&lt;key&gt;ProgramArguments&lt;/key&gt;
+${TAB}&lt;array&gt;
+${TAB}${TAB}&lt;string&gt;sh&lt;/string&gt;
+${TAB}${TAB}&lt;string&gt;-c&lt;/string&gt;
+${TAB}${TAB}&lt;string&gt;echo &quot;rdr pass proto tcp from any to any port {80,8080} -&gt; 127.0.0.1 port 8080&quot; | pfctl -a &quot;com.apple/260.HttpFwdFirewall&quot; -Ef - &amp;amp;&amp;amp; echo &quot;rdr pass proto tcp from any to any port {443,8443} -&gt; 127.0.0.1 port 8443&quot; | pfctl -a &quot;com.apple/261.HttpFwdFirewall&quot; -Ef - &amp;amp;&amp;amp; sysctl -w net.inet.ip.forwarding=1&lt;/string&gt;
+${TAB}&lt;/array&gt;
+${TAB}&lt;key&gt;RunAtLoad&lt;/key&gt;
+${TAB}&lt;true/&gt;
+${TAB}&lt;key&gt;UserName&lt;/key&gt;
+${TAB}&lt;string&gt;root&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+EOF'</span></pre></div>
+
+<p>This file will be loaded on login and set up the 80->8080 and 443->8443 port forwards, but we can load it manually now so we don't need to log out and back in:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #c20cb9; font-weight: bold;">sudo</span> launchctl load <span style="color: #660033;">-Fw</span> <span style="color: #000000; font-weight: bold;">/</span>Library<span style="color: #000000; font-weight: bold;">/</span>LaunchDaemons<span style="color: #000000; font-weight: bold;">/</span>co.echo.httpdfwd.plist</pre></div>
+
+<h1>PHP</h1>
+
+<p>The following is for the latest release of PHP, version 5.6. If you'd like to use 5.3, 5.4 or 5.5, simply change the "5.6" and "php56" values below appropriately.</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;">brew <span style="color: #c20cb9; font-weight: bold;">install</span> <span style="color: #660033;">-v</span> homebrew<span style="color: #000000; font-weight: bold;">/</span>php<span style="color: #000000; font-weight: bold;">/</span>php56</pre></div>
+
+<p>Set timezone and change other PHP settings (<strong>sudo</strong> is needed here to get the current timezone on OS X) to be more developer-friendly, and add a PHP error log (without this, you may get Internal Server Errors if PHP has errors to write and no logs to write to):</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">&#40;</span><span style="color: #7a0874; font-weight: bold;">export</span> <span style="color: #007800;">USERHOME</span>=$<span style="color: #7a0874; font-weight: bold;">&#40;</span>dscl . <span style="color: #660033;">-read</span> <span style="color: #000000; font-weight: bold;">/</span>Users<span style="color: #000000; font-weight: bold;">/`</span><span style="color: #c20cb9; font-weight: bold;">whoami</span><span style="color: #000000; font-weight: bold;">`</span> NFSHomeDirectory <span style="color: #000000; font-weight: bold;">|</span> <span style="color: #c20cb9; font-weight: bold;">awk</span> <span style="color: #660033;">-F</span><span style="color: #ff0000;">&quot;\: &quot;</span> <span style="color: #ff0000;">'{print $2}'</span><span style="color: #7a0874; font-weight: bold;">&#41;</span> ; <span style="color: #c20cb9; font-weight: bold;">sed</span> <span style="color: #660033;">-i</span> <span style="color: #ff0000;">'-default'</span> <span style="color: #660033;">-e</span> <span style="color: #ff0000;">'s|^;\(date\.timezone[[:space:]]*=\).*|\1 \&quot;'</span>$<span style="color: #7a0874; font-weight: bold;">&#40;</span><span style="color: #c20cb9; font-weight: bold;">sudo</span> systemsetup <span style="color: #660033;">-gettimezone</span><span style="color: #000000; font-weight: bold;">|</span><span style="color: #c20cb9; font-weight: bold;">awk</span> <span style="color: #660033;">-F</span><span style="color: #ff0000;">&quot;\: &quot;</span> <span style="color: #ff0000;">'{print $2}'</span><span style="color: #7a0874; font-weight: bold;">&#41;</span><span style="color: #ff0000;">'\&quot;|; s|^\(memory_limit[[:space:]]*=\).*|\1 512M|; s|^\(post_max_size[[:space:]]*=\).*|\1 200M|; s|^\(upload_max_filesize[[:space:]]*=\).*|\1 100M|; s|^\(default_socket_timeout[[:space:]]*=\).*|\1 600|; s|^\(max_execution_time[[:space:]]*=\).*|\1 300|; s|^\(max_input_time[[:space:]]*=\).*|\1 600|; $a\'</span>$<span style="color: #ff0000;">'\n'</span><span style="color: #ff0000;">'\'</span>$<span style="color: #ff0000;">'\n'</span><span style="color: #ff0000;">'; PHP Error log\'</span>$<span style="color: #ff0000;">'\n'</span><span style="color: #ff0000;">'error_log = '</span><span style="color: #007800;">$USERHOME</span><span style="color: #ff0000;">'/Sites/logs/php-error_log'</span>$<span style="color: #ff0000;">'\n'</span> $<span style="color: #7a0874; font-weight: bold;">&#40;</span>brew --prefix<span style="color: #7a0874; font-weight: bold;">&#41;</span><span style="color: #000000; font-weight: bold;">/</span>etc<span style="color: #000000; font-weight: bold;">/</span>php<span style="color: #000000; font-weight: bold;">/</span><span style="color: #000000;">5.6</span><span style="color: #000000; font-weight: bold;">/</span>php.ini<span style="color: #7a0874; font-weight: bold;">&#41;</span></pre></div>
+
+<p>Fix a <strong>pear</strong> and <strong>pecl</strong> <a href="https://github.com/Homebrew/homebrew-php/issues/1039#issuecomment-41307694">permissions problem</a>:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #c20cb9; font-weight: bold;">chmod</span> <span style="color: #660033;">-R</span> ug+<span style="color: #c20cb9; font-weight: bold;">w</span> $<span style="color: #7a0874; font-weight: bold;">&#40;</span>brew <span style="color: #660033;">--prefix</span> php56<span style="color: #7a0874; font-weight: bold;">&#41;</span><span style="color: #000000; font-weight: bold;">/</span>lib<span style="color: #000000; font-weight: bold;">/</span>php</pre></div>
+
+<p>The optional Opcache extension will speed up your PHP environment dramatically, so let's install it. Then, we'll bump up the opcache memory limit:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;">brew <span style="color: #c20cb9; font-weight: bold;">install</span> <span style="color: #660033;">-v</span> php56-opcache</pre></div>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">/</span>usr<span style="color: #000000; font-weight: bold;">/</span>bin<span style="color: #000000; font-weight: bold;">/</span><span style="color: #c20cb9; font-weight: bold;">sed</span> <span style="color: #660033;">-i</span> <span style="color: #ff0000;">''</span> <span style="color: #ff0000;">&quot;s|^\(\;\)\{0,1\}[[:space:]]*\(opcache\.enable[[:space:]]*=[[:space:]]*\)0|\21|; s|^;\(opcache\.memory_consumption[[:space:]]*=[[:space:]]*\)[0-9]*|\1256|;&quot;</span> $<span style="color: #7a0874; font-weight: bold;">&#40;</span>brew --prefix<span style="color: #7a0874; font-weight: bold;">&#41;</span><span style="color: #000000; font-weight: bold;">/</span>etc<span style="color: #000000; font-weight: bold;">/</span>php<span style="color: #000000; font-weight: bold;">/</span><span style="color: #000000;">5.6</span><span style="color: #000000; font-weight: bold;">/</span>php.ini</pre></div>
+
+<p>Finally, let's start PHP-FPM:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;">brew services start php56</pre></div>
+
+<p><strong>Optional:</strong> At this point, if you want to switch between PHP versions, you'd want to: <strong>brew services stop php56 &amp;&amp; brew unlink php56 &amp;&amp; brew link php54 &amp;&amp; brew services start php54</strong>. No need to touch the Apache configuration at all!</p>
+
+<h1>DNSMasq</h1>
+
+<p>A difference now between what <a href="/blog/never-touch-your-local-etchosts-file-os-x-again">I've shown before</a>, is that we don't have to run on port 53 or run <strong>dnsmasq</strong> as root. The end result here is that any DNS request ending in <em>.dev</em> reply with the IP address <em>127.0.0.1</em>:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;">brew <span style="color: #c20cb9; font-weight: bold;">install</span> <span style="color: #660033;">-v</span> dnsmasq</pre></div>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #ff0000;">'address=/.dev/127.0.0.1'</span> <span style="color: #000000; font-weight: bold;">&gt;</span> $<span style="color: #7a0874; font-weight: bold;">&#40;</span>brew --prefix<span style="color: #7a0874; font-weight: bold;">&#41;</span><span style="color: #000000; font-weight: bold;">/</span>etc<span style="color: #000000; font-weight: bold;">/</span>dnsmasq.conf</pre></div>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #ff0000;">'listen-address=127.0.0.1'</span> <span style="color: #000000; font-weight: bold;">&gt;&gt;</span> $<span style="color: #7a0874; font-weight: bold;">&#40;</span>brew --prefix<span style="color: #7a0874; font-weight: bold;">&#41;</span><span style="color: #000000; font-weight: bold;">/</span>etc<span style="color: #000000; font-weight: bold;">/</span>dnsmasq.conf</pre></div>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #7a0874; font-weight: bold;">echo</span> <span style="color: #ff0000;">'port=35353'</span> <span style="color: #000000; font-weight: bold;">&gt;&gt;</span> $<span style="color: #7a0874; font-weight: bold;">&#40;</span>brew --prefix<span style="color: #7a0874; font-weight: bold;">&#41;</span><span style="color: #000000; font-weight: bold;">/</span>etc<span style="color: #000000; font-weight: bold;">/</span>dnsmasq.conf</pre></div>
+
+<p>Similar to how we run Apache and PHP-FPM, we'll start DNSMasq:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;">brew services start dnsmasq</pre></div>
+
+<p>With DNSMasq running, configure OS X to use your local host for DNS queries ending in <em>.dev</em>:</p>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #c20cb9; font-weight: bold;">sudo</span> <span style="color: #c20cb9; font-weight: bold;">mkdir</span> <span style="color: #660033;">-v</span> <span style="color: #000000; font-weight: bold;">/</span>etc<span style="color: #000000; font-weight: bold;">/</span>resolver </pre></div>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #c20cb9; font-weight: bold;">sudo</span> <span style="color: #c20cb9; font-weight: bold;">bash</span> <span style="color: #660033;">-c</span> <span style="color: #ff0000;">'echo &quot;nameserver 127.0.0.1&quot; &gt; /etc/resolver/dev'</span></pre></div>
+
+<div class="geshifilter"><pre class="bash geshifilter-bash" style="font-family:monospace;"><span style="color: #c20cb9; font-weight: bold;">sudo</span> <span style="color: #c20cb9; font-weight: bold;">bash</span> <span style="color: #660033;">-c</span> <span style="color: #ff0000;">'echo &quot;port 35353&quot; &gt;&gt; /etc/resolver/dev'</span></pre></div>
+
+<p>To test, the command <strong>ping -c 3 fakedomainthatisntreal.dev</strong> should return results from 127.0.0.1. If it doesn't work right away, try turning WiFi off and on (or unplug/plug your ethernet cable), or reboot your system.</p>
+
+<h1>Great! So, what did I do?</h1>
+
+<p>We set up Apache to run on boot on ports 8080 and 8443 with auto-VirtualHosts for directories in the <em>~/Sites</em> folder and PHP-FPM via mod_fastcgi. The OS X firewall will forward all port 80 traffic to port 8080 and port 443 to port 8443, so we don't have specify the port number when visiting web pages in local web browsers or run Apache as root. MySQL is installed and set to run on boot as well. DNSMasq and some OS X configuration is used to direct any hostname ending in <em>.dev</em> to the local system to work in conjunction with Apache's auto-VirtualHosts.</p>
+
+<h2>What do I do now?</h2>
+
+<p>You shouldn't need to edit the Apache configuration or edit /etc/hosts for new local development sites. Simply create a directory in <em>~/Sites</em> and then reference "http://" + that foldername + ".dev/" in your browser to access it.</p>
+
+<p>For example, download Drupal 7 to the directory <em>~/Sites/firstproject</em>, and it can then be accessed at <em>http://firstproject.dev/</em> without any additional configuration. A caveat - you will need to uncomment the line in Drupal's <em>.htaccess</em> containing <strong>"RewriteBase /"</strong> to work with the auto-VirtualHosts configuration.</p>
+
+<h2>What if this "auto-VirtualHost" doesn't work for <em>[other project]</em>?</h2>
+
+<p>If you need to create a manual VirtualHost in Apache because the auto-VirtualHost does not work for your configuration, you will need to declare it before the auto-VirtualHosts if you're also going to use .dev as the TLD. Otherwise the auto-VirtualHost block will be accessed first. I have a commented-out sample for a manual VirtualHost entry in "<em>~/Sites/httpd-vhosts.conf</em>" you may use.</p>
+
+<h1>Troubleshooting</h1>
+
+<p>The commands above can be run on a fresh Yosemite system without issue as I've tested with fresh installs in VMware. Nearly every problem I've heard about has been related to upgrading from 10.9 or earlier, or switching to this style of setup from another or similar setup. The easiest thing to do would be to <strong>brew uninstall</strong> each component referenced above, delete all related config files in <em>$(brew --prefix)/etc</em> and any Homebrew files in <em>~/Library/LaunchAgents</em>, and start over. If that's a bit heavy-handed, check each of the configuration files edited in this guide and look for duplicate entries or typos.</p>
+
+<p>You can also check log files for error output:</p>
+
+<ul>
+<li>Apache: <em>$(brew --prefix)/var/log/apache2/error_log</em>, or run <strong>httpd -DFOREGROUND</strong> and look for output</li>
+<li>PHP-FPM: <em>$(brew --prefix)/var/log/php-fpm.log</em></li>
+<li>MySQL: <em>$(brew --prefix)/var/mysql/$(hostname).err</em></li>
+<li>DNSMasq: no log file, run <strong>dnsmasq --keep-in-foreground</strong> and look for output</li>
+</ul>
+
+<p>Leave a comment if you have any questions or problems!</p>
+</div></div></div><div data-set="append-tags" class="append--tags--mobile group-post-tags field-group-html-element"><div class="mobile-slider mobile-slider--tags"><div class="label-above">Categories</div><div class="field-items"><p class="field-item"><div class='blog--filter'><a href='/blog?field_type_value=labs'>Tech</a></div></p></div></div><div class="mobile-slider mobile-slider--tags"><div class="label-above">Tags</div><div class="field-items"><p class="field-item"><a href="/tags/drupal" typeof="skos:Concept" property="rdfs:label skos:prefLabel" datatype="">drupal</a></p><p class="field-item"><a href="/tags/mamp-0" typeof="skos:Concept" property="rdfs:label skos:prefLabel" datatype="">mamp</a></p><p class="field-item"><a href="/tags/local-development-environment" typeof="skos:Concept" property="rdfs:label skos:prefLabel" datatype="">local development environment</a></p><p class="field-item"><a href="/tags/php" typeof="skos:Concept" property="rdfs:label skos:prefLabel" datatype="">php</a></p><p class="field-item"><a href="/tags/apache" typeof="skos:Concept" property="rdfs:label skos:prefLabel" datatype="">apache</a></p><p class="field-item"><a href="/tags/mysql" typeof="skos:Concept" property="rdfs:label skos:prefLabel" datatype="">mysql</a></p><p class="field-item"><a href="/tags/homebrew" typeof="skos:Concept" property="rdfs:label skos:prefLabel" datatype="">homebrew</a></p><p class="field-item"><a href="/tags/dnsmasq" typeof="skos:Concept" property="rdfs:label skos:prefLabel" datatype="">dnsmasq</a></p></div></div><div class="mobile-slider last-one"><div class="label-above">Related Posts</div><div class="field-items"><p class="field-item"><div class="view view-blog view-id-blog view-display-id-block_12 view-dom-id-e099d8af6042ed31a24e0b252485cfa3">
+        
+  
+  
+      <div class="view-content">
+        <div class="views-row views-row-1 views-row-odd views-row-first">
+      
+  <div class="views-field views-field-title">        <span class="field-content"><a href="/blog/rapid-drupal-scaffolding-yeoman">Rapid Drupal Scaffolding with Yeoman</a></span>  </div>  </div>
+  <div class="views-row views-row-2 views-row-even">
+      
+  <div class="views-field views-field-title">        <span class="field-content"><a href="/blog/code-management-drupal-7-using-features-ctools-and-panels">Code Management in Drupal 7 using Features, Ctools, and Panels</a></span>  </div>  </div>
+  <div class="views-row views-row-3 views-row-odd views-row-last">
+      
+  <div class="views-field views-field-title">        <span class="field-content"><a href="/blog/building-flexibility-mits-new-online-newsletter">Building flexibility into MIT&#039;s new online newsletter</a></span>  </div>  </div>
+    </div>
+  
+  
+  
+  
+  
+  
+</div></p></div></div></div>      </div>
+    </div>
+
+</div>
+
+<!-- Needed to activate display suite support on forms -->
+    </div>
+
+  </div>
+</div> <!-- /block-inner /block --><div id="block-disqus-disqus_comments" class="block block-disqus block-even clearfix">
+  <div class="block-inner">
+
+            
+
+    <div class="content" >
+      <div id="disqus_thread"><noscript><p><a href="http://echoditto.disqus.com/?url=https%3A%2F%2Fecho.co%2Fblog%2Fos-x-1010-yosemite-local-development-environment-apache-php-and-mysql-homebrew">View the discussion thread.</a></p></noscript></div>    </div>
+
+  </div>
+</div> <!-- /block-inner /block -->  </div>
+  </div>
+
+
+  <div class="region--print-message">
+        <div class="region region-print-message">
+    <div id="block-block-27" class="block block-block block-odd first clearfix">
+  <div class="block-inner">
+
+            
+
+    <div class="content" >
+       <p>I see you like to read printed material. You should check out Nicco's book <em>The End of Big</em>: <a href="http://endofbig.com">http://endofbig.com</a></p>
+     </div>
+
+  </div>
+</div> <!-- /block-inner /block -->  </div>
+  </div>
+
+</section> <!-- /content-inner /content -->
+
+ <!-- /rightrail -->
+
+</div>
+</div> <!-- /main -->
+
+
+<!-- ______________________ FOOTER _______________________ -->
+
+<footer id="footer" class="main--footer region--footer">
+  <div class="main--footer--inside inside-constrained">
+        <div class="region--footer-first">
+          <div class="footer--logo--wrapper"><a href="/" class="footer--logo" title="Home" rel="home"></a></div>
+            <div class="region region-footer-first">
+    <div id="block-system-main-menu" class="block block-system menu--main block-menu block-odd first clearfix">
+  <div class="block-inner">
+
+            
+
+    <div class="content" >
+      <ul class="menu"><li class="first leaf work mid-600"><a href="/our-work">Work</a></li>
+<li class="collapsed services mid-591"><a href="/services">Services</a></li>
+<li class="leaf blog mid-585"><a href="/blog">Blog</a></li>
+<li class="collapsed team mid-586"><a href="/team">Team</a></li>
+<li class="leaf careers mid-1635"><a href="/team/careers">Careers</a></li>
+<li class="last leaf hire-us- mid-1397"><a href="/hire-us" class="highlighted">Hire Us!</a></li>
+</ul>    </div>
+
+  </div>
+</div> <!-- /block-inner /block --><div id="block-menu-menu-secondary" class="block block-menu menu--secondary block-even clearfix">
+  <div class="block-inner">
+
+            
+
+    <div class="content" >
+      <ul class="menu"><li class="first leaf jobs mid-1395"><a href="/team/careers">Jobs</a></li>
+<li class="last leaf press mid-1396"><a href="/work/in-the-news">Press</a></li>
+</ul>    </div>
+
+  </div>
+</div> <!-- /block-inner /block -->  </div>
+    </div>
+    
+  <div class="region--footer-second">  <div class="region region-footer-second">
+    <div id="block-block-1" class="block block-block block--social-media block-odd first clearfix">
+  <div class="block-inner">
+
+            
+
+    <div class="content" >
+       <a href="https://twitter.com/echoandcompany" class="social-icon twitter ir" title="Find us on Twitter">Twitter</a>
+<a href="https://www.facebook.com/echoandcompany" class="social-icon facebook ir" title="Like us on Facebook">Facebook</a>
+<a href="https://plus.google.com/+EchoDitto" class="social-icon google ir" title="Find us on Google Plus">Google Plus</a>
+<a href="/blog/feed" class="social-icon rss ir" title="Add us to your RSS feed">RSS</a>
+<a href="/hire-us" target="_top" class="social-icon email ir" title="Contact us">Email</a>
+     </div>
+
+  </div>
+</div> <!-- /block-inner /block --><div id="block-block-9" class="block block-block block--sign-up block-even clearfix">
+  <div class="block-inner">
+
+              <h2 class="block-title">Hear from us</h2>
+        
+
+    <div class="content" >
+       <form action="http://echoditto.us6.list-manage1.com/subscribe/post?u=777e56f6a7a95632dec7484d3&amp;id=c2f5983c41" name="mc-embedded-subscribe-form" method="post" class="form--email" id="mc-embedded-subscribe-form"> 
+	<input type="text" id="email" name="EMAIL" value="Email Address" class="styled" onfocus="this.value=''" /><button type="submit" name="subscribe" class="button--submit">
+  <i class="icon icon--arrow-right"></i> <span class="visuallyhidden">Go</span>
+</button>
+</form>     </div>
+
+  </div>
+</div> <!-- /block-inner /block --><div id="block-block-18" class="block block-block block--contact block-odd clearfix">
+  <div class="block-inner">
+
+            
+
+    <div class="content" >
+       <div class="contact--section contact--boston">
+<p class="contact--title">Boston, MA</p>
+<p class="contact--address">One Davis Square<br />Suite 302<br />Somerville, MA 02144</p>
+</div>
+<div class="contact--section contact--washington">
+<p class="contact--title">Washington, DC</p>
+<p class="contact--address">1629 K Street, NW<br />Suite 604<br />Washington, DC 20006</p>
+</div>
+<p> </p>
+     </div>
+
+  </div>
+</div> <!-- /block-inner /block -->  </div>
+</div>
+
+  <div class="region--footer-third">  <div class="region region-footer-third">
+    <div id="block-ditto_contact-ditto_contact" class="block block-ditto-contact block--copyright block-odd first clearfix">
+  <div class="block-inner">
+
+            
+
+    <div class="content" >
+      
+      <div class="contact-info">
+            <div class="phone"><a href="tel:2022859455">202.285.9455</a></div>
+            <div class="email"><a href = "mailto:info@echo.co">info@echo.co</a></div>
+      </div>
+      <div class="copyright">&copy;2015 Echo & Co. All rights reserved.</div>
+          </div>
+
+  </div>
+</div> <!-- /block-inner /block -->  </div>
+</div>
+</div>
+
+</footer> <!-- /footer -->
+
+
+</div> <!-- /page -->
+  </body>
+</html>
