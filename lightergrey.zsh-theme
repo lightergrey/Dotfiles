@@ -94,8 +94,8 @@ prompt_lightergrey_setup() {
 	# show username@host if logged in through SSH
 	[[ "$SSH_CONNECTION" != '' ]] && prompt_lightergrey_username='%n@%m '
 
-	ZSH_THEME_GIT_PROMPT_PREFIX=" %f%F{white}"
-	ZSH_THEME_GIT_PROMPT_SUFFIX="%b"
+	ZSH_THEME_GIT_PROMPT_PREFIX=" %f[%F{white}"
+	ZSH_THEME_GIT_PROMPT_SUFFIX="%b]"
 	ZSH_THEME_GIT_PROMPT_DIRTY=""
 	ZSH_THEME_GIT_PROMPT_CLEAN=""
 
@@ -106,8 +106,8 @@ prompt_lightergrey_setup() {
 	ZSH_THEME_GIT_PROMPT_UNTRACKED="%F{green}★%f "
 
 	# prompt turns red if the previous command didn't exit with 0
-	PROMPT='%c$(git_prompt_info) $(git_prompt_status) %(?.%F{white}.%F{red})❯%f '
-	RPROMPT='%F{red}%(?..⏎)%f'
+	PROMPT='%F{white}%c$(git_prompt_info) $(git_prompt_status) %(?.%F{white}.%F{red})❯%f '
+	RPROMPT='%F{red}%(?..)%f'
 }
 
 prompt_lightergrey_setup "$@"
