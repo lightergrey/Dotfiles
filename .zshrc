@@ -41,7 +41,7 @@ alias ohmyzsh="vim ~/.oh-my-zsh"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(bower brew bundle cap common-aliases dirhistory gem git git-sync github node npm osx rails ruby rvm ssh-agent sublime terminalapp vagrant)
+plugins=(atom bower brew bundle cap colorize common-aliases dirhistory gem git github node npm osx rails ruby rvm ssh-agent terminalapp vagrant)
 
 source $ZSH/oh-my-zsh.sh
 
