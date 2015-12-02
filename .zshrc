@@ -41,7 +41,7 @@ alias ohmyzsh="vim ~/.oh-my-zsh"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(atom bower brew bundle cap colorize common-aliases dirhistory gem git github node npm osx rails ruby rvm ssh-agent terminalapp vagrant)
+plugins=(common-aliases git githb zsh-navigation-tools)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -62,22 +62,24 @@ alias show='defaults write com.apple.finder AppleShowAllFiles YES; killall Finde
 alias hide='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
 
 # Mushy stuff
-bday=1399561860
+#bday=1399561860
+bday=1399565460
 now=$(date +%s)
-diff=$(($now - $bday))
+total_seconds=$(($now - $bday))
 
-local tmp=$diff
-local years=$(( tmp / 60 / 60 / 24 / 365 ))
-local months=$(( tmp / 60 / 60 / 24 / 7 / 4.33 % 12 ))
-local weeks=$(( tmp / 60 / 60 / 24 / 7 % 4.33 ))
-local days=$(( tmp / 60 / 60 / 24 % 7 ))
-local hours=$(( tmp / 60 / 60 % 24 ))
-local minutes=$(( tmp / 60 % 60 ))
-local seconds=$(( tmp % 60 ))
+local seconds=$(( total_seconds % 60 ))
+local total_minutes=$(( total_seconds / 60 ))
+local minutes=$(( total_minutes % 60 ))
+local total_hours=$(( total_minutes / 60 ))
+local hours=$(( total_hours % 24 ))
+local total_days=$(( total_hours / 24 ))
+local days=$(( total_days % 7 ))
+local total_weeks=$(( total_days / 7 ))
+local weeks=$(( total_weeks % 52 ))
+local years=$(( total_weeks / 52 ))
 
 echo -n "$fg[green]Ezra is "
 (( $years > 0 )) && echo -n "${years}y "
-(( $months > 0 )) && echo -n "${months}mo "
 (( $weeks > 0 )) && echo -n "${weeks}w "
 (( $days > 0 )) && echo -n "${days}d "
 (( $hours > 0 )) && echo -n "${hours}h "
