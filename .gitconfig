@@ -1,6 +1,9 @@
 [user]
 	name = Josh Stewart
 	email = hi@joshstewart.me
+[github]
+  user = lightergrey
+	token = e10bf51e4ed4d4ee72ed9b8f2e0fd52ec2493371
 [color]
 	ui = 1
 [credential]
