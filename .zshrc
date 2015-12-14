@@ -41,13 +41,15 @@ alias ohmyzsh="vim ~/.oh-my-zsh"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(common-aliases git githb zsh-navigation-tools)
+plugins=(bundler common-aliases git githb zsh-navigation-tools)
 
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 
-export PATH=/usr/local/bin:/usr/bin:/usr/sbin:/usr/local/sbin:/bin:/sbin:/Users/josh/.rvm/bin:/Users/josh/.rvm/gems/ruby-2.1.2/bin:/Users/josh/.rvm/rubies/ruby-2.1.2/bin:/Users/josh/.rvm/gems/ruby-2.1.2@global/bin:/opt/X11/bin:/usr/local/git/bin:$PATH
+homebrew=/usr/local/bin:/usr/local/sbin
+export PATH=$homebrew:$PATH
+# export PATH=/usr/local/bin:/usr/bin:/usr/sbin:/usr/local/sbin:/bin:/sbin:/opt/X11/bin:/usr/local/git/bin:$PATH
 
 # Common paths
 alias tb="cd ~/Sites/Tinybop-Website"
