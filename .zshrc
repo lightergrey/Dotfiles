@@ -5,7 +5,25 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="lightergrey"
+
+ZSH_THEME="bullet-train"
+BULLETTRAIN_TIME_SHOW="false"
+BULLETTRAIN_DIR_BG="10"
+BULLETTRAIN_DIR_FG="8"
+BULLETTRAIN_GIT_BG="4"
+BULLETTRAIN_GIT_FG="0"
+BULLETTRAIN_GIT_DIRTY=" "
+BULLETTRAIN_GIT_CLEAN=""
+BULLETTRAIN_GIT_COLORIZE_DIRTY="true"
+BULLETTRAIN_GIT_EXTENDED="true"
+BULLETTRAIN_GIT_ADDED="+"
+BULLETTRAIN_GIT_MODIFIED="±"
+BULLETTRAIN_GIT_DELETED="−"
+BULLETTRAIN_GIT_UNTRACKED="✭"
+BULLETTRAIN_RUBY_SHOW="false"
+BULLETTRAIN_PROMPT_CHAR="❯"
+
+# DEFAULT_USER="Josh"
 # ZSH_THEME="pure"
 
 # Example aliases
@@ -41,7 +59,7 @@ alias ohmyzsh="vim ~/.oh-my-zsh"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(bundler common-aliases git githb zsh-navigation-tools)
+plugins=(atom brew bundler common-aliases emoji git github npm osx z zsh-navigation-tools)
 
 source $ZSH/oh-my-zsh.sh
 
