@@ -105,3 +105,5 @@ echo -n "$fg[green]Ezra is "
 (( $hours > 0 )) && echo -n "${hours}h "
 (( $minutes > 0 )) && echo -n "${minutes}m "
 echo "${seconds}s old."
+
+export EDITOR=/Applications/Atom.app/Contents/MacOS/Atom
