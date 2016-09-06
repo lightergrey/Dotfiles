@@ -108,3 +108,5 @@ echo "${seconds}s old."
 
 # Load rbenv automatically
 eval "$(rbenv init -)"
+
+export EDITOR=/Applications/Atom.app/Contents/MacOS/Atom
