@@ -59,4 +59,8 @@ alias tbssh="ssh root@70.32.89.52"
 alias show='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
 alias hide='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
 
+# Load rbenv automatically
+eval "$(rbenv init -)"
+
+# Use Atom as default editor
 export EDITOR=/Applications/Atom.app/Contents/MacOS/Atom

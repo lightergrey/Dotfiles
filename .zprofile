@@ -22,8 +22,6 @@ function precmd () {
   z --add "$(pwd -P)"
 }
 
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
 if [ -z "$SSH_AUTH_SOCK" ] ; then
   eval `ssh-agent -s`
   ssh-add
