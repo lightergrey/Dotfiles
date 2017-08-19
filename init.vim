@@ -12,11 +12,9 @@ Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'Yggdroot/indentLine'
 Plug 'airblade/vim-gitgutter'
-Plug 'bogado/file-line'
 Plug 'chriskempson/base16-vim'
 Plug 'duggiefresh/vim-easydir'
 Plug 'elzr/vim-json'
-Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown'
 Plug 'honza/vim-snippets'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -45,41 +43,42 @@ filetype plugin indent on
 let mapleader=' '
 
 set autoindent
-set autowrite
 set autoread
+set autowrite
 set clipboard^=unnamedplus
 set cursorline
 set expandtab
 set foldlevel=99
-set hlsearch
 set history=500
-set incsearch
+set hlsearch
 set ignorecase
+set incsearch
 set laststatus=2
 set linebreak
 set mouse=a
 set nobackup
 set noshowmode
 set noswapfile
-set writebackup
 set number
 set omnifunc=syntaxcomplete#Complete
+set relativenumber
 set scrolloff=5
 set shiftwidth=4
 set shortmess+=I
-set smartindent
-set smartcase
-set smarttab
 set showtabline=0
+set smartcase
+set smartindent
+set smarttab
 set splitbelow
 set splitright
 set tabstop=4
 set undodir=~/.vim/undodir
 set undofile
+set visualbell
 set wildchar=<TAB>
 set wildmenu
 set wildmode=list:longest,full
-set visualbell
+set writebackup
 
 " }}}
 
@@ -280,9 +279,6 @@ let g:NERDTreeWinSize=60
 " -----------------------------------------------------------------------
 " Syntax {{{
 " -----------------------------------------------------------------------
-" Markdown
-let g:vim_markdown_folding_disabled=1
-let g:vim_markdown_conceal = 0
 let g:vim_json_syntax_conceal = 0
 
 " }}}
