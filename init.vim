@@ -6,8 +6,7 @@ filetype off
 " -----------------------------------------------------------------------
 call plug#begin('~/.vim/plugged')
 
-Plug 'JulesWang/css.vim' | Plug 'cakebaker/scss-syntax.vim'
-Plug 'Shougo/deoplete.nvim'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'Yggdroot/indentLine'
@@ -15,17 +14,19 @@ Plug 'airblade/vim-gitgutter'
 Plug 'chriskempson/base16-vim'
 Plug 'duggiefresh/vim-easydir'
 Plug 'elzr/vim-json'
+Plug 'haya14busa/vim-poweryank'
 Plug 'honza/vim-snippets'
+Plug 'joonty/vdebug'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
+Plug 'mattn/webapi-vim' | Plug 'urthbound/hound.vim'
+Plug 'mustache/vim-mustache-handlebars'
 Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
 Plug 'sbdchd/neoformat'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
-Plug 'svermeulen/vim-easyclip' | Plug 'tpope/vim-repeat'
-Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-fugitive' | Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
@@ -43,9 +44,11 @@ filetype plugin indent on
 let mapleader=' '
 
 set autoindent
-set autoread
 set autowrite
-set clipboard^=unnamedplus
+set autoread
+if has('unnamedplus')
+    set clipboard^=unnamedplus
+endif
 set cursorline
 set expandtab
 set foldlevel=99
@@ -146,16 +149,11 @@ let g:airline#extensions#tabline#enabled=0
 " -----------------------------------------------------------------------
 highlight ALEErrorSign ctermbg=none ctermfg=01
 highlight ALEWarningSign ctermbg=none ctermfg=03
-let g:ale_linters = {
-\   'javascript': ['eslint'],
-\}
+let g:ale_linters = { 'javascript': ['eslint'], 'php': ['php'], }
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '●'
 let g:ale_sign_warning = '▲'
-let g:ale_javascript_eslint_use_global=1
-let g:ale_fixers = {
-\   'javascript': ['eslint'],
-\}
+let g:ale_fixers = { 'javascript': ['eslint'], }
 
 " }}}
 
@@ -170,24 +168,19 @@ let g:NERDTrimTrailingWhitespace=1
 " -----------------------------------------------------------------------
 " Deoplete {{{
 " -----------------------------------------------------------------------
-let g:deoplete#enable_at_startup = 1
-let g:neosnippet#enable_snipmate_compatibility = 1
 let g:deoplete#auto_complete_delay = 1
+let g:deoplete#auto_refresh_delay = 1
+let g:deoplete#enable_at_startup = 1
 let g:deoplete#min_pattern_length = 1
-let g:deoplete#sources#ternjs#filetypes = [
-    \ 'jsx',
-    \ 'javascript.jsx',
-    \ ]
+let g:neosnippet#enable_snipmate_compatibility = 1
+let g:neosnippet#expand_word_boundary = 1
 
 " }}}
 
-" ----------------------------------------------------------------------
-" EasyClip {{{
-" ----------------------------------------------------------------------
-let g:EasyClipUsePasteDefaults = 0
-let g:EasyClipShareYanks = 1
-let g:EasyClipUsePasteToggleDefaults = 0
-let g:EasyClipUseCutDefaults = 0
+" -----------------------------------------------------------------------
+" Fugitive - Git {{{
+" -----------------------------------------------------------------------
+let g:github_enterprise_urls=['https://github.etsycorp.com']
 
 " }}}
 
@@ -250,13 +243,6 @@ let g:gitgutter_diff_args='HEAD'
 " }}}
 
 " -----------------------------------------------------------------------
-" Indent guides {{{
-" -----------------------------------------------------------------------
-let g:indentLine_char='|'
-
-" }}}
-
-" -----------------------------------------------------------------------
 " Neoformat {{{
 " -----------------------------------------------------------------------
 let g:neoformat_javascript_prettier = {
@@ -270,16 +256,18 @@ let g:neoformat_enabled_javascript = ['prettier']
 " }}}
 
 " -----------------------------------------------------------------------
-" NERD Tree {{{
+" Syntax {{{
 " -----------------------------------------------------------------------
-let g:NERDTreeWinSize=60
+let g:vim_json_syntax_conceal = 0
 
 " }}}
 
 " -----------------------------------------------------------------------
-" Syntax {{{
+" Vdebug {{{
 " -----------------------------------------------------------------------
-let g:vim_json_syntax_conceal = 0
+let g:vdebug_options={}
+let g:vdebug_options["break_on_open"]=0
+let g:vdebug_options["timeout"]=60
 
 " }}}
 
@@ -303,6 +291,11 @@ inoremap <expr><CR>
     \ pumvisible()
     \     ? deoplete#mappings#close_popup()
     \     : "\<CR>"
+
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+	\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 
 " Edit vimrc and apply changes
 nnoremap <leader>ev :vsplit $MYVIMRC<CR>
@@ -368,13 +361,6 @@ nnoremap <leader>rr :Rg <C-R><C-W><CR>
 " Fuzzy search for selected in all files in current directory
 vnoremap <leader>rr y :Rg <C-R>"<CR>
 
-" Fuzzy search in all tags
-noremap <leader>t :Tags<CR>
-" Fuzzy search for word under cursor in all tags
-nnoremap <leader>tt :Tags <C-R><C-W><CR>
-" Fuzzy search for selected in all tags
-vnoremap <leader>tt y :Tags <C-R>"<CR>
-
 " Fuzzy search in all files names in history
 noremap <leader>h :History<CR>
 " Fuzzy search in all open buffer names
@@ -422,6 +408,12 @@ nmap <leader>y <Plug>MoveMotionPlug
 xmap <leader>y <Plug>MoveMotionXPlug
 nmap <leader>yy <Plug>MoveMotionLinePlug
 
+" Yank selection from remote to local clipboard
+map <leader>py <Plug>(operator-poweryank-osc52)
+
+" Yank github url for current buffer from remote to local clipboard
+map <leader>gy :redir @g<CR>:Gbrowse!<CR>:redir END<CR>:PowerYankOSC52 <C-R>g<CR>
+
 " Trim trailing whitespace
 map <leader>ws :%s/\s\+$//e<CR>
 
@@ -461,60 +453,6 @@ vnoremap jk <esc>
 " Move lines visually
 " noremap <silent> k gk
 " noremap <silent> j gj
-
-" }}}
-
-" -----------------------------------------------------------------------
-" HardMode {{{
-" -----------------------------------------------------------------------
-fun! HardMode()
-    set backspace=0
-
-    nnoremap <buffer> <Left> <Esc>:echo('No arrow keys.')<CR>
-    nnoremap <buffer> <Right> <Esc>:echo('No arrow keys.')<CR>
-    nnoremap <buffer> <Up> <Esc>:echo('No arrow keys.')<CR>
-    nnoremap <buffer> <Down> <Esc>:echo('No arrow keys.')<CR>
-    nnoremap <buffer> <PageDown> <Esc>:echo('No arrow keys.')<CR>
-
-    inoremap <buffer> <Left> <Esc>:echo('No arrow keys.')<CR>
-    inoremap <buffer> <Right> <Esc>:echo('No arrow keys.')<CR>
-    inoremap <buffer> <Up> <Esc>:echo('No arrow keys.')<CR>
-    inoremap <buffer> <Down> <Esc>:echo('No arrow keys.')<CR>
-    inoremap <buffer> <PageUp> <Esc>:echo('No arrow keys.')<CR>
-    inoremap <buffer> <PageDown> <Esc>:echo('No arrow keys.')<CR>
-
-    vnoremap <buffer> <Left> <Esc>:echo('No arrow keys.')<CR>
-    vnoremap <buffer> <Right> <Esc>:echo('No arrow keys.')<CR>
-    vnoremap <buffer> <Up> <Esc>:echo('No arrow keys.')<CR>
-    vnoremap <buffer> <Down> <Esc>:echo('No arrow keys.')<CR>
-    vnoremap <buffer> <PageUp> <Esc>:echo('No arrow keys.')<CR>
-    vnoremap <buffer> <PageDown> <Esc>:echo('No arrow keys.')<CR>
-endfun
-
-fun! EasyMode()
-    set backspace=indent,eol,start
-
-    silent! nunmap <buffer> <Left>
-    silent! nunmap <buffer> <Right>
-    silent! nunmap <buffer> <Up>
-    silent! nunmap <buffer> <Down>
-    silent! nunmap <buffer> <PageUp>
-    silent! nunmap <buffer> <PageDown>
-
-    silent! iunmap <buffer> <Left>
-    silent! iunmap <buffer> <Right>
-    silent! iunmap <buffer> <Up>
-    silent! iunmap <buffer> <Down>
-    silent! iunmap <buffer> <PageUp>
-    silent! iunmap <buffer> <PageDown>
-
-    silent! vunmap <buffer> <Left>
-    silent! vunmap <buffer> <Right>
-    silent! vunmap <buffer> <Up>
-    silent! vunmap <buffer> <Down>
-    silent! vunmap <buffer> <PageUp>
-    silent! vunmap <buffer> <PageDown>
-endfun
 
 " }}}
 
