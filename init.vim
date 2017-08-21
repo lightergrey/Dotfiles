@@ -440,8 +440,8 @@ nnoremap <leader># :call NumberToggle()<cr>
 " nnoremap <leader>Q :qa!<CR>
 
 " Quicker esc
-inoremap jk <esc>
-vnoremap jk <esc>
+" inoremap jk <esc>
+" vnoremap jk <esc>
 
 " Unfold
 " nnoremap <leader> za
