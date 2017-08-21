@@ -295,7 +295,7 @@ inoremap <expr><CR>
 smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 	\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+imap <C-j>     <Plug>(neosnippet_expand_or_jump)
 
 " Edit vimrc and apply changes
 nnoremap <leader>ev :vsplit $MYVIMRC<CR>
