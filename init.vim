@@ -10,7 +10,7 @@ Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'Yggdroot/indentLine'
 Plug 'airblade/vim-gitgutter'
-Plug 'chriskempson/base16-vim'
+Plug 'lightergrey/base16-vim'
 Plug 'duggiefresh/vim-easydir'
 Plug 'haya14busa/incsearch.vim'
 Plug 'honza/vim-snippets'
@@ -41,9 +41,9 @@ let mapleader=' '
 set autoindent
 set autoread
 set backspace=indent,eol,start
+set clipboard+=unnamed
 set complete-=i
 set conceallevel=0
-set clipboard+=unnamed
 set display+=lastline
 set encoding=utf-8
 set expandtab
@@ -117,20 +117,6 @@ let g:ale_sign_warning = '▲'
 " Colorscheme {{{
 " -----------------------------------------------------------------------
 colorscheme base16-oceanicnext
-highlight ALEErrorSign guifg=#EC5f67 guibg=none
-highlight ALEWarningSign guifg=#FAC863 guibg=none
-highlight ColorColumn guifg=#1B2B34 guibg=#C0C5CE
-highlight CursorLineNR guibg=none
-highlight EndOfBuffer guifg=#1B2B34
-highlight GitGutterAdd guibg=none
-highlight GitGutterChange guibg=none
-highlight GitGutterDelete guibg=none
-highlight GitGutterChangeDelete guibg=none
-highlight LineNr guibg=none
-highlight StatusLine guibg=none
-highlight TabLineFill guibg=#343D46
-highlight TabLineSel guibg=none
-highlight VertSplit guibg=#343D46 guifg=#343D46
 call matchadd('ColorColumn', '\%81v', 100)
 
 " }}}
