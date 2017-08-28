@@ -10,6 +10,6 @@
   * `brew install python3`
   * `pip3 install --user neovim`
 * Symlink `init.vim`: `ln -s ~/Development/Dotfiles/init.vim ~/.config/nvim/init.vim`
+* Adding `~/.config/nvim/local.init.vim` will add local overrides
 * Install [vim-plug](https://github.com/junegunn/vim-plug#installation)
 * Install plugins in Vim: `:PlugInstall`
-* Install tern: `npm install -g tern`
