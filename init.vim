@@ -43,7 +43,8 @@ set autoread
 set backspace=indent,eol,start
 set complete-=i
 set conceallevel=0
-set display+=lastline " what exactly does this do?
+set clipboard+=unnamed
+set display+=lastline
 set encoding=utf-8
 set expandtab
 set foldlevel=99
@@ -55,7 +56,7 @@ set ignorecase
 set incsearch
 set laststatus=2
 set linebreak
-set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+ " what exactly does this do?
+set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
 set mouse=a
 set nobackup
 set noswapfile
@@ -104,13 +105,11 @@ autocmd InsertLeave * :set relativenumber
 " -----------------------------------------------------------------------
 " Ale (linter) {{{
 " -----------------------------------------------------------------------
-highlight ALEErrorSign guifg=#EC5f67 guibg=none
-highlight ALEWarningSign guifg=#FAC863 guibg=none
+let g:ale_fixers = { 'javascript': ['eslint'], }
 let g:ale_linters = { 'javascript': ['eslint'], 'php': ['php'], }
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '●'
 let g:ale_sign_warning = '▲'
-let g:ale_fixers = { 'javascript': ['eslint'], }
 
 " }}}
 
@@ -118,8 +117,15 @@ let g:ale_fixers = { 'javascript': ['eslint'], }
 " Colorscheme {{{
 " -----------------------------------------------------------------------
 colorscheme base16-oceanicnext
+highlight ALEErrorSign guifg=#EC5f67 guibg=none
+highlight ALEWarningSign guifg=#FAC863 guibg=none
+highlight ColorColumn guifg=#1B2B34 guibg=#C0C5CE
 highlight CursorLineNR guibg=none
 highlight EndOfBuffer guifg=#1B2B34
+highlight GitGutterAdd guibg=none
+highlight GitGutterChange guibg=none
+highlight GitGutterDelete guibg=none
+highlight GitGutterChangeDelete guibg=none
 highlight LineNr guibg=none
 highlight StatusLine guibg=none
 highlight TabLineFill guibg=#343D46
@@ -164,10 +170,6 @@ set suffixesadd+=.jsx
 " -----------------------------------------------------------------------
 " GitGutter {{{
 " -----------------------------------------------------------------------
-highlight GitGutterAdd guibg=none
-highlight GitGutterChange guibg=none
-highlight GitGutterDelete guibg=none
-highlight GitGutterChangeDelete guibg=none
 let g:gitgutter_sign_added='|'
 let g:gitgutter_sign_modified='|'
 let g:gitgutter_sign_removed_first_line='-'
@@ -307,7 +309,3 @@ map *  <Plug>(incsearch-nohl-*)
 map #  <Plug>(incsearch-nohl-#)
 map g* <Plug>(incsearch-nohl-g*)
 map g# <Plug>(incsearch-nohl-g#)
-
-if filereadable(glob("~/.config/nvim/local.init.vim"))
-    source ~/.config/nvim/local.init.vim
-endif
