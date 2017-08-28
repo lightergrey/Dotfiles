@@ -1,5 +1,4 @@
 syntax on
-filetype off
 
 " -----------------------------------------------------------------------
 " Plugins {{{
@@ -13,23 +12,18 @@ Plug 'Yggdroot/indentLine'
 Plug 'airblade/vim-gitgutter'
 Plug 'chriskempson/base16-vim'
 Plug 'duggiefresh/vim-easydir'
-Plug 'elzr/vim-json'
-Plug 'haya14busa/vim-poweryank'
 Plug 'honza/vim-snippets'
-Plug 'joonty/vdebug'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
-Plug 'mattn/webapi-vim' | Plug 'urthbound/hound.vim'
-Plug 'mustache/vim-mustache-handlebars'
 Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
 Plug 'sbdchd/neoformat'
-Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive' | Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-surround'
-Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-vinegar'
 Plug 'w0rp/ale'
 
 call plug#end()
@@ -39,42 +33,45 @@ filetype plugin indent on
 " }}}
 
 " -----------------------------------------------------------------------
-" Settings {{{
+" Options {{{
 " -----------------------------------------------------------------------
 let mapleader=' '
 
 set autoindent
-set autowrite
 set autoread
-if has('unnamedplus')
-    set clipboard^=unnamedplus
-endif
-set cursorline
+set backspace=indent,eol,start
+set complete-=i
+set conceallevel=0
+set display+=lastline " what exactly does this do?
+set encoding=utf-8
 set expandtab
 set foldlevel=99
-set history=500
+set formatoptions+=j
+set hidden
+set history=1000
 set hlsearch
 set ignorecase
 set incsearch
 set laststatus=2
 set linebreak
+set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+ " what exactly does this do?
 set mouse=a
 set nobackup
-set noshowmode
 set noswapfile
 set number
-set omnifunc=syntaxcomplete#Complete
 set relativenumber
+set ruler
 set scrolloff=5
 set shiftwidth=4
-set shortmess+=I
-set showtabline=0
+set showtabline=2
 set smartcase
 set smartindent
 set smarttab
 set splitbelow
 set splitright
+set tabpagemax=50
 set tabstop=4
+set termguicolors
 set undodir=~/.vim/undodir
 set undofile
 set visualbell
@@ -88,16 +85,11 @@ set writebackup
 " -----------------------------------------------------------------------
 " Autocommands  {{{
 " -----------------------------------------------------------------------
-" source vimrc when written
+" Source vimrc when saved
 augroup SourceVIMRC
     autocmd!
     autocmd BufWritePost init.vim source $MYVIMRC
 augroup END
-" Close NERDTree if it is the last open buffer
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" Set good folding
-autocmd FileType php,js,jsx,css,scss,tpl setl foldmethod=syntax
-autocmd FileType php,js,jsx,css,scss,tpl setl foldlevel=2
 " Remove extra whitespace
 autocmd FileType php,js,jsx,css,scss,tpl,vim autocmd BufWritePre <buffer> %s/\s\+$//e
 " Refresh buffer on focus
@@ -109,46 +101,10 @@ autocmd InsertLeave * :set relativenumber
 " }}}
 
 " -----------------------------------------------------------------------
-" Colorscheme {{{
-" -----------------------------------------------------------------------
-" +--------+--------+--------+--------+--------+--------+--------+--------+
-" | grey 1 | grey 2 | grey 3 | grey 4 | grey 5 | grey 6 | grey 7 | grey 8 |
-" |   00   |   10   |   11   |   08   |   12   |   07   |   13   |   15   |
-" +--------+--------+--------+--------+--------+--------+--------+--------+
-" |  red   | orange | yellow | green  |  teal  |  blue  | violet | brown  |
-" |   01   |   09   |   03   |   02   |   06   |   04   |   05   |   14   |
-" +--------+--------+--------+--------+--------+--------+--------+--------+
-colorscheme base16-oceanicnext
-highlight LineNr ctermfg=11 ctermbg=00
-highlight SignColumn ctermbg=00
-highlight VertSplit ctermbg=10 ctermfg=10
-call matchadd('ColorColumn', '\%81v', 100)
-highlight clear CursorLine
-highlight CursorLineNR ctermbg=none
-highlight clear SpellBad
-highlight SpellBad cterm=undercurl ctermfg=01
-highlight clear SpellCap
-highlight SpellCap cterm=undercurl ctermfg=03
-highlight DiffAdd ctermbg=02 ctermfg=00
-highlight DiffChange ctermbg=09 ctermfg=00
-highlight DiffDelete ctermbg=01 ctermfg=00
-
-" }}}
-
-" -----------------------------------------------------------------------
-" Airline {{{
-" -----------------------------------------------------------------------
-let g:airline#extensions#branch#enabled=1
-let g:airline#extensions#ale#enabled=1
-let g:airline#extensions#tabline#enabled=0
-
-" }}}
-
-" -----------------------------------------------------------------------
 " Ale (linter) {{{
 " -----------------------------------------------------------------------
-highlight ALEErrorSign ctermbg=none ctermfg=01
-highlight ALEWarningSign ctermbg=none ctermfg=03
+highlight ALEErrorSign guifg=#EC5f67 guibg=none
+highlight ALEWarningSign guifg=#FAC863 guibg=none
 let g:ale_linters = { 'javascript': ['eslint'], 'php': ['php'], }
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '●'
@@ -158,10 +114,17 @@ let g:ale_fixers = { 'javascript': ['eslint'], }
 " }}}
 
 " -----------------------------------------------------------------------
-" Commenter {{{
+" Colorscheme {{{
 " -----------------------------------------------------------------------
-let g:NERDSpaceDelims=1
-let g:NERDTrimTrailingWhitespace=1
+colorscheme base16-oceanicnext
+highlight CursorLineNR guibg=none
+highlight EndOfBuffer guifg=#1B2B34
+highlight LineNr guibg=none
+highlight StatusLine guibg=none
+highlight TabLineFill guibg=#343D46
+highlight TabLineSel guibg=none
+highlight VertSplit guibg=#343D46 guifg=#343D46
+call matchadd('ColorColumn', '\%81v', 100)
 
 " }}}
 
@@ -178,39 +141,9 @@ let g:neosnippet#expand_word_boundary = 1
 " }}}
 
 " -----------------------------------------------------------------------
-" Fugitive - Git {{{
-" -----------------------------------------------------------------------
-let g:github_enterprise_urls=['https://github.etsycorp.com']
-
-" }}}
-
-" -----------------------------------------------------------------------
 " FZF - Fuzzy File {{{
 " -----------------------------------------------------------------------
-let g:fzf_colors={
-    \ 'fg':      ['fg', 'Normal'],
-    \ 'bg':      ['bg', 'Normal'],
-    \ 'hl':      ['fg', 'Comment'],
-    \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-    \ 'bg+':     ['bg', 'Normal'],
-    \ 'hl+':     ['fg', 'Statement'],
-    \ 'info':    ['fg', 'PreProc'],
-    \ 'prompt':  ['fg', 'Conditional'],
-    \ 'pointer': ['fg', 'Exception'],
-    \ 'marker':  ['fg', '03'],
-    \ 'spinner': ['fg', 'Label'],
-    \ 'header':  ['fg', 'Comment']
-    \}
 let g:fzf_buffers_jump = 1
-
-function! s:fzf_statusline()
-    highlight fzf1 ctermfg=00 ctermbg=11
-    highlight fzf2 ctermfg=00 ctermbg=11
-    highlight fzf3 ctermfg=00 ctermbg=11
-    setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
-endfunction
-
-autocmd! User FzfStatusLine call <SID>fzf_statusline()
 
 " }}}
 
@@ -230,44 +163,15 @@ set suffixesadd+=.jsx
 " -----------------------------------------------------------------------
 " GitGutter {{{
 " -----------------------------------------------------------------------
-highlight GitGutterAdd ctermbg=00
-highlight GitGutterChange ctermbg=00 ctermfg=3
-highlight GitGutterDelete ctermbg=00
-highlight GitGutterChangeDelete ctermbg=00 ctermfg=3
+highlight GitGutterAdd guibg=none
+highlight GitGutterChange guibg=none
+highlight GitGutterDelete guibg=none
+highlight GitGutterChangeDelete guibg=none
 let g:gitgutter_sign_added='|'
 let g:gitgutter_sign_modified='|'
 let g:gitgutter_sign_removed_first_line='-'
 let g:gitgutter_sign_modified_removed='|'
 let g:gitgutter_diff_args='HEAD'
-
-" }}}
-
-" -----------------------------------------------------------------------
-" Neoformat {{{
-" -----------------------------------------------------------------------
-let g:neoformat_javascript_prettier = {
-    \ 'exe': 'prettier',
-    \ 'args': ['--stdin', '--tab-width=4'],
-    \ 'stdin': 1,
-    \ }
-
-let g:neoformat_enabled_javascript = ['prettier']
-
-" }}}
-
-" -----------------------------------------------------------------------
-" Syntax {{{
-" -----------------------------------------------------------------------
-let g:vim_json_syntax_conceal = 0
-
-" }}}
-
-" -----------------------------------------------------------------------
-" Vdebug {{{
-" -----------------------------------------------------------------------
-let g:vdebug_options={}
-let g:vdebug_options["break_on_open"]=0
-let g:vdebug_options["timeout"]=60
 
 " }}}
 
@@ -296,6 +200,8 @@ smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 	\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
 imap <C-j>     <Plug>(neosnippet_expand_or_jump)
+
+nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 
 " Edit vimrc and apply changes
 nnoremap <leader>ev :vsplit $MYVIMRC<CR>
@@ -374,109 +280,15 @@ noremap <leader>? :Helptags<CR>
 " Fuzzy search in all commands
 noremap <leader>c :Commands<CR>
 
-" Move lines
-nnoremap <silent> <C-K> :move-2<CR>
-nnoremap <silent> <C-J> :move+<CR>
-nnoremap <silent> <C-H> <<
-nnoremap <silent> <C-L> >>
-xnoremap <silent> <C-K> :move-2<CR>gv
-xnoremap <silent> <C-J> :move'>+<CR>gv
-xnoremap <silent> <C-H> <gv
-xnoremap <silent> <C-L> >gv
-
-" Toggle comments
-noremap <leader><leader> :call NERDComment(0,"toggle")<CR>
-
-" Show buffer in NerdTree or toggle
-function! NerdTreeToggleOrPath()
-    if (!exists('t:NERDTreeBufName') || bufwinnr(t:NERDTreeBufName) == -1) && &modifiable
-        exe ':NERDTreeFind'
-    else
-        exe ':NERDTreeToggle'
-    endif
-endfunction
-map <C-\> :call NerdTreeToggleOrPath()<CR>
-
 " Change two vertically split windows to horizonally split
 map <leader>vh <C-W>t<C-W>K
 
 " Change two horizonally split windows to vertically split
 map <leader>hv <C-W>t<C-W>H
 
-" Cut selection or line
-nmap <leader>y <Plug>MoveMotionPlug
-xmap <leader>y <Plug>MoveMotionXPlug
-nmap <leader>yy <Plug>MoveMotionLinePlug
-
-" Yank selection from remote to local clipboard
-map <leader>py <Plug>(operator-poweryank-osc52)
-
-" Yank github url for current buffer from remote to local clipboard
-map <leader>gy :redir @g<CR>:Gbrowse!<CR>:redir END<CR>:PowerYankOSC52 <C-R>g<CR>
-
 " Trim trailing whitespace
 map <leader>ws :%s/\s\+$//e<CR>
 
-" Toggle between relative and absolute numbers
-function! NumberToggle()
-  if(&relativenumber == 1)
-    set norelativenumber
-  else
-    set relativenumber
-  endif
-endfunc
-
-nnoremap <leader># :call NumberToggle()<cr>
-
-" ***
-" Maybe get rid of these?
-" ***
-
-" Save
-" nnoremap <leader>s :update<CR>
-
-" Quit
-" nnoremap <leader>q :q<CR>
-" nnoremap <leader>Q :qa!<CR>
-
-" Quicker esc
-" inoremap jk <esc>
-" vnoremap jk <esc>
-
-" Unfold
-" nnoremap <leader> za
-" vnoremap <leader> za
-
-" Maybe an ok folding setup?
-" nnoremap <leader>fa :setlocal foldlevel=1 <bar> :setlocal foldmethod=syntax<CR>
-
-" Move lines visually
-" noremap <silent> k gk
-" noremap <silent> j gj
-
-" }}}
-
-" -----------------------------------------------------------------------
-" Notes {{{
-" -----------------------------------------------------------------------
-" http://vim.wikia.com/wiki/All_the_right_moves
-
-" zM            - Close all folds
-" zm            - fold level by level
-" zR            - Open all folds
-" zr            - Open level by level
-
-" gt            - tab next
-" gT            - tabprevious
-
-" gf            - Edit existing file under cursor in same window
-" C-Wf          - Edit existing file under cursor in split window
-" C-Wgf         - Edit existing file under cursor in new tabpage
-
-" <Leader>hs    - Stage hunk
-" <Leader>hu    - Undo stage hunk
-" ]c            - jump to next hunk (change)
-" [c            - jump to previous hunk (change)
-
-" }}}
-
+if filereadable(glob("~/.config/nvim/local.init.vim"))
+    source ~/.config/nvim/local.init.vim
+endif
