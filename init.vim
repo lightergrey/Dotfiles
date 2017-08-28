@@ -12,6 +12,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'airblade/vim-gitgutter'
 Plug 'chriskempson/base16-vim'
 Plug 'duggiefresh/vim-easydir'
+Plug 'haya14busa/incsearch.vim'
 Plug 'honza/vim-snippets'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -176,6 +177,13 @@ let g:gitgutter_diff_args='HEAD'
 " }}}
 
 " -----------------------------------------------------------------------
+" Incsearch {{{
+" -----------------------------------------------------------------------
+let g:incsearch#auto_nohlsearch = 1
+
+" }}}
+
+" -----------------------------------------------------------------------
 " Mappings {{{
 " -----------------------------------------------------------------------
 " autocompletion
@@ -288,6 +296,17 @@ map <leader>hv <C-W>t<C-W>H
 
 " Trim trailing whitespace
 map <leader>ws :%s/\s\+$//e<CR>
+
+" Better incsearch
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+map n  <Plug>(incsearch-nohl-n)
+map N  <Plug>(incsearch-nohl-N)
+map *  <Plug>(incsearch-nohl-*)
+map #  <Plug>(incsearch-nohl-#)
+map g* <Plug>(incsearch-nohl-g*)
+map g# <Plug>(incsearch-nohl-g#)
 
 if filereadable(glob("~/.config/nvim/local.init.vim"))
     source ~/.config/nvim/local.init.vim
