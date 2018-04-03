@@ -5,23 +5,21 @@ syntax on
 " -----------------------------------------------------------------------
 call plug#begin('~/.vim/plugged')
 
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'Shougo/neosnippet'
-Plug 'Shougo/neosnippet-snippets'
 Plug 'Yggdroot/indentLine'
 Plug 'airblade/vim-gitgutter'
-Plug 'lightergrey/base16-vim'
+Plug 'chriskempson/base16-vim'
 Plug 'duggiefresh/vim-easydir'
 Plug 'haya14busa/incsearch.vim'
-Plug 'honza/vim-snippets'
+Plug 'haya14busa/vim-poweryank'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'mustache/vim-mustache-handlebars'
 Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
-Plug 'sbdchd/neoformat'
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-fugitive' | Plug 'tpope/vim-rhubarb'
+Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
@@ -58,6 +56,7 @@ set ignorecase
 set incsearch
 set laststatus=2
 set linebreak
+set list
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
 set mouse=a
 set nobackup
@@ -75,7 +74,6 @@ set splitbelow
 set splitright
 set tabpagemax=50
 set tabstop=4
-set termguicolors
 set undodir=~/.vim/undodir
 set undofile
 set visualbell
@@ -92,7 +90,7 @@ set writebackup
 " Source vimrc when saved
 augroup SourceVIMRC
     autocmd!
-    autocmd BufWritePost init.vim source $MYVIMRC
+    autocmd BufWritePost .vimrc source $MYVIMRC
 augroup END
 " Remove extra whitespace
 autocmd FileType php,js,jsx,css,scss,tpl,vim autocmd BufWritePre <buffer> %s/\s\+$//e
@@ -118,27 +116,15 @@ let g:ale_sign_warning = '▲'
 " -----------------------------------------------------------------------
 " Colorscheme {{{
 " -----------------------------------------------------------------------
-colorscheme base16-oceanicnext
 call matchadd('ColorColumn', '\%81v', 100)
-
-" }}}
-
-" -----------------------------------------------------------------------
-" Deoplete {{{
-" -----------------------------------------------------------------------
-let g:deoplete#auto_complete_delay = 1
-let g:deoplete#enable_at_startup = 1
-
-" Use shift tab to go up in suggestion list
-imap <expr><S-TAB>
-    \ pumvisible()
-    \     ? "\<C-p>"
-    \     : "\<S-TAB>"
-" Close suggestion list with return
-inoremap <expr><CR>
-    \ pumvisible()
-    \     ? deoplete#mappings#close_popup()
-    \     : "\<CR>"
+colorscheme base16-oceanicnext
+highlight CursorLineNR ctermbg=black
+highlight GitGutterAdd ctermbg=black
+highlight GitGutterChange ctermbg=black
+highlight GitGutterChangeDelete ctermbg=black
+highlight GitGutterDelete ctermbg=black
+highlight LineNr ctermbg=black ctermfg=11
+highlight SignColumn ctermbg=black
 
 " }}}
 
@@ -207,6 +193,13 @@ nnoremap <leader>rr :Rg <C-R><C-W><CR>
 " Fuzzy search for selected in all files in current directory
 vnoremap <leader>rr y :Rg <C-R>"<CR>
 
+" Fuzzy search in tags
+noremap <leader>t :Tags<CR>
+" Fuzzy search for word under cursor in tags
+nnoremap <leader>tt :Tags <C-R><C-W><CR>
+" Fuzzy search for selected in tags
+vnoremap <leader>tt y :Tags <C-R>"<CR>
+
 " Fuzzy search in all files names in history
 noremap <leader>h :History<CR>
 " Fuzzy search in all open buffer names
@@ -258,23 +251,10 @@ map g# <Plug>(incsearch-nohl-g#)
 " }}}
 
 " -----------------------------------------------------------------------
-" Neosnippet {{{
+" Indent Line {{{
 " -----------------------------------------------------------------------
-let g:neosnippet#enable_snipmate_compatibility = 1
-let g:neosnippet#expand_word_boundary = 1
-
-" Use tab to expand or jump for a snippet
-imap <expr><TAB>
-    \ pumvisible()
-    \     ? "\<C-n>"
-    \     : neosnippet#expandable_or_jumpable()
-    \         ? "\<Plug>(neosnippet_expand_or_jump)"
-    \         : "\<TAB>"
-" Use tab to move to next expandable area in snippet
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-	\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-" Alternate mapping for expand
-imap <C-j>     <Plug>(neosnippet_expand_or_jump)
+let g:indentLine_setColors = 1
+let g:indentLine_enabled = 0
 
 " }}}
 
@@ -297,3 +277,10 @@ map <leader>hv <C-W>t<C-W>H
 " Trim trailing whitespace
 map <leader>ws :%s/\s\+$//e<CR>
 
+" Yank selection from remote to local clipboard
+map <leader>py <Plug>(operator-poweryank-osc52)
+
+" Yank github url for current buffer from remote to local clipboard
+map <leader>gy :redir @g<CR>:Gbrowse!<CR>:redir END<CR>:PowerYankOSC52 <C-R>g<CR>
+
+" }}}

@@ -2,14 +2,15 @@
 
 ## Setup:
 
-* Install [pure-prompt](https://github.com/sindresorhus/pure#npm)
-* Symlink `.zshrc`: `ln -s ~/Development/Dotfiles/zshrc ~/.zshrc`
-* Symlink `.zprofile`: `ln -s ~/Development/Dotfiles/zprofile ~/.zprofile`
-* Install python3 and neovim
-  * `brew install neovim`
-  * `brew install python3`
-  * `pip3 install --user neovim`
-* Symlink `init.vim`: `ln -s ~/Development/Dotfiles/init.vim ~/.config/nvim/init.vim`
+* Install [pure-prompt](https://github.com/sindresorhus/pure#npm) via `npm` or manally
+* Clone [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) to `~/.zsh`
+* Clone [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting) to `~/.zsh`
+* Symlink `.zshrc`: `ln -s ~/development/dotfiles/zshrc ~/.zshrc`
+* Symlink `fzf-git.zsh`: `ln -s ~/development/dotfiles/fzf-git.zsh ~/.zsh/fzf-git.zsh`
+* Symlink `.tmux.conf`: `ln -s ~/development/dotfiles/tmux.conf ~/.tmux.conf`
 * Install [vim-plug](https://github.com/junegunn/vim-plug#installation)
 * Install plugins in Vim: `:PlugInstall`
-* Install tern: `npm install -g tern`
+* Install ripgrep:
+    * `sudo yum-config-manager --add-repo=https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-7/carlwgeorge-ripgrep-epel-7.repo`
+    * `sudo yum install ripgrep`
+
