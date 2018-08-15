@@ -6,13 +6,20 @@ is_in_git_repo() {
 }
 
 fzf-down() {
-  fzf --height 50% "$@" --border
+  fzf --ansi \
+      --border \
+      --cycle \
+      --multi \
+      --preview-window="down:50%" \
+      --height 80% "$@" \
+      --bind='alt-k:preview-up' \
+      --bind='alt-j:preview-down'
 }
 
 gf() {
   is_in_git_repo || return
   git -c color.status=always status --short |
-  fzf-down -m --ansi --nth 2..,.. \
+  fzf-down --nth 2..,.. \
     --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1}) | head -500' |
   cut -c4- | sed 's/.* -> //'
 }
@@ -28,7 +35,7 @@ gb() {
 gh() {
   is_in_git_repo || return
   git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
-  fzf-down --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
+  fzf-down --no-sort --reverse --bind 'ctrl-s:toggle-sort' \
     --header 'Press CTRL-S to toggle sort' \
     --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always | head -'$LINES |
   grep -o "[a-f0-9]\{7,\}"
@@ -51,4 +58,3 @@ bind-git-helper() {
 }
 bind-git-helper f b h
 unset -f bind-git-helper
-

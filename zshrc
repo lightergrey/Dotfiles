@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH
+export PATH=$HOME/opt/bin:$HOME/bin:/usr/local/bin:/usr/local/sbin:$HOME/.composer/vendor/bin:$PATH
 setopt correctall auto_cd
 
 # Vim mode
@@ -38,4 +38,3 @@ bindkey '^F' forward-word
 bindkey '^E' autosuggest-execute
 
 source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-

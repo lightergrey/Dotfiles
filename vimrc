@@ -6,24 +6,30 @@ syntax on
 call plug#begin('~/.vim/plugged')
 
 Plug 'Yggdroot/indentLine'
-Plug 'airblade/vim-gitgutter'
 Plug 'chriskempson/base16-vim'
-Plug 'duggiefresh/vim-easydir'
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/vim-poweryank'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'ludovicchabant/vim-gutentags'
-Plug 'mustache/vim-mustache-handlebars'
-Plug 'mxw/vim-jsx'
-Plug 'pangloss/vim-javascript'
+Plug 'mhinz/vim-signify'
+Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-commentary'
+Plug 'Shougo/deoplete.nvim'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+Plug 'vim-vdebug/vdebug'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
 Plug 'w0rp/ale'
+Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install && composer run-script parse-stubs'}
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 
 call plug#end()
 
@@ -99,6 +105,7 @@ autocmd FocusGained,BufEnter * :silent! !
 " Try relative numbers in normal mode and absolute in insert
 autocmd InsertEnter * :set norelativenumber
 autocmd InsertLeave * :set relativenumber
+autocmd FileType php LanguageClientStart
 
 " }}}
 
@@ -113,20 +120,24 @@ let g:ale_sign_warning = '▲'
 
 " }}}
 
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#num_processes = 1
+let g:LanguageClient_serverCommands = {
+    \ 'php': ['php-language-server'],
+    \ }
+nnoremap <F4> :call LanguageClient_contextMenu()<CR>
+
 " -----------------------------------------------------------------------
 " Colorscheme {{{
 " -----------------------------------------------------------------------
 call matchadd('ColorColumn', '\%81v', 100)
 colorscheme base16-oceanicnext
 highlight CursorLineNR ctermbg=black
-highlight GitGutterAdd ctermbg=black
-highlight GitGutterChange ctermbg=black
-highlight GitGutterChangeDelete ctermbg=black
-highlight GitGutterDelete ctermbg=black
 highlight LineNr ctermbg=black ctermfg=11
 highlight SignColumn ctermbg=black
-
-" }}}
+highlight SignifySignAdd ctermbg=none
+highlight SignifySignDelete ctermbg=none
+highlight SignifySignChange ctermbg=none
 
 " -----------------------------------------------------------------------
 " FZF - Fuzzy File {{{
@@ -139,10 +150,10 @@ xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
 
 " FZF Insert mode completion
-imap <C-X><C-K> <plug>(fzf-complete-word)
-imap <C-X><C-F> <plug>(fzf-complete-path)
-imap <C-X><C-J> <plug>(fzf-complete-file-ag)
-imap <C-X><C-L> <plug>(fzf-complete-line)
+" imap <C-X><C-K> <plug>(fzf-complete-word)
+" imap <C-X><C-F> <plug>(fzf-complete-path)
+" imap <C-X><C-J> <plug>(fzf-complete-file-ag)
+" imap <C-X><C-L> <plug>(fzf-complete-line)
 
 function! CleanWord(word)
     return substitute(
@@ -212,24 +223,6 @@ noremap <leader>g :GFiles?<CR>
 noremap <leader>? :Helptags<CR>
 " Fuzzy search in all commands
 noremap <leader>c :Commands<CR>
-
-" }}}
-
-" -----------------------------------------------------------------------
-" GitGutter {{{
-" -----------------------------------------------------------------------
-let g:gitgutter_sign_added='|'
-let g:gitgutter_sign_modified='|'
-let g:gitgutter_sign_removed_first_line='-'
-let g:gitgutter_sign_modified_removed='|'
-let g:gitgutter_diff_args='HEAD'
-
-nmap ]h <Plug>GitGutterNextHunk
-nmap [h <Plug>GitGutterPrevHunk
-omap ih <Plug>GitGutterTextObjectInnerPending
-omap ah <Plug>GitGutterTextObjectOuterPending
-xmap ih <Plug>GitGutterTextObjectInnerVisual
-xmap ah <Plug>GitGutterTextObjectOuterVisual
 
 " }}}
 
