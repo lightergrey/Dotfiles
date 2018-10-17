@@ -5,31 +5,18 @@ syntax on
 " -----------------------------------------------------------------------
 call plug#begin('~/.vim/plugged')
 
-Plug 'Yggdroot/indentLine'
 Plug 'chriskempson/base16-vim'
-Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/vim-poweryank'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'junegunn/vim-peekaboo'
-Plug 'ludovicchabant/vim-gutentags'
 Plug 'mhinz/vim-signify'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-commentary'
-Plug 'Shougo/deoplete.nvim'
-Plug 'roxma/nvim-yarp'
-Plug 'roxma/vim-hug-neovim-rpc'
-Plug 'vim-vdebug/vdebug'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
 Plug 'w0rp/ale'
-Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install && composer run-script parse-stubs'}
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
 
 call plug#end()
 
@@ -49,12 +36,10 @@ if has('unnamedplus')
     set clipboard^=unnamedplus
 endif
 set complete-=i
-set conceallevel=0
 set display+=lastline
 set encoding=utf-8
 set expandtab
 set foldlevel=99
-set formatoptions+=j
 set hidden
 set history=1000
 set hlsearch
@@ -93,11 +78,6 @@ set writebackup
 " -----------------------------------------------------------------------
 " Autocommands  {{{
 " -----------------------------------------------------------------------
-" Source vimrc when saved
-augroup SourceVIMRC
-    autocmd!
-    autocmd BufWritePost .vimrc source $MYVIMRC
-augroup END
 " Remove extra whitespace
 autocmd FileType php,js,jsx,css,scss,tpl,vim autocmd BufWritePre <buffer> %s/\s\+$//e
 " Refresh buffer on focus
@@ -105,7 +85,6 @@ autocmd FocusGained,BufEnter * :silent! !
 " Try relative numbers in normal mode and absolute in insert
 autocmd InsertEnter * :set norelativenumber
 autocmd InsertLeave * :set relativenumber
-autocmd FileType php LanguageClientStart
 
 " }}}
 
@@ -115,29 +94,14 @@ autocmd FileType php LanguageClientStart
 let g:ale_fixers = { 'javascript': ['eslint'], }
 let g:ale_linters = { 'javascript': ['eslint'], 'php': ['php'], }
 let g:ale_sign_column_always = 1
-let g:ale_sign_error = '●'
-let g:ale_sign_warning = '▲'
 
 " }}}
-
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#num_processes = 1
-let g:LanguageClient_serverCommands = {
-    \ 'php': ['php-language-server'],
-    \ }
-nnoremap <F4> :call LanguageClient_contextMenu()<CR>
 
 " -----------------------------------------------------------------------
 " Colorscheme {{{
 " -----------------------------------------------------------------------
 call matchadd('ColorColumn', '\%81v', 100)
 colorscheme base16-oceanicnext
-highlight CursorLineNR ctermbg=black
-highlight LineNr ctermbg=black ctermfg=11
-highlight SignColumn ctermbg=black
-highlight SignifySignAdd ctermbg=none
-highlight SignifySignDelete ctermbg=none
-highlight SignifySignChange ctermbg=none
 
 " -----------------------------------------------------------------------
 " FZF - Fuzzy File {{{
@@ -148,124 +112,22 @@ let g:fzf_buffers_jump = 1
 nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
-
-" FZF Insert mode completion
-" imap <C-X><C-K> <plug>(fzf-complete-word)
-" imap <C-X><C-F> <plug>(fzf-complete-path)
-" imap <C-X><C-J> <plug>(fzf-complete-file-ag)
-" imap <C-X><C-L> <plug>(fzf-complete-line)
-
-function! CleanWord(word)
-    return substitute(
-        \    shellescape(a:word),
-        \    '[\/,_]',
-        \    ' ',
-        \    'g'
-        \ )
-endfunction
-
-" :Files - Start fzf searching files
-command! -bar -bang -nargs=? -complete=dir Files
-    \ call fzf#vim#files(
-    \   '',
-    \   {'options': '--query '. CleanWord(<q-args>) .' -i'}
-    \ )
-
-" :Rg  - Start fzf with hidden preview window that can be enabled with '?' key
-" :Rg! - Start fzf in fullscreen and display the preview window above
-command! -bang -nargs=* Rg
-    \ call fzf#vim#grep(
-    \   'rg --column --line-number --no-heading --color=always  --glob "!build/*" --glob "!dist/*" --glob "!sandbox/*" '.shellescape(<q-args>), 1,
-    \   <bang>0 ? fzf#vim#with_preview('up:40%')
-    \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-    \   <bang>0)
-
 " Fuzzy search in all files names in current directory
 noremap <leader>f :Files<CR>
-" Fuzzy search for word under cursor in all files names in current directory
-nnoremap <leader>ff :Files <C-R><C-W><CR>
-" Fuzzy search for selected in all files names in current directory
-vnoremap <leader>ff y :Files <C-R>"<CR>
-
-" Fuzzy search in all files names in current buffer's directory
-nnoremap <leader>p :Files %:h<CR>
-
-" Fuzzy search in all open buffer lines
-noremap <leader>l :Lines<CR>
-" Fuzzy search for word under cursor in all open buffer lines
-nnoremap <leader>ll :Lines <C-R><C-W><CR>
-" Fuzzy search for selected  in all open buffer lines
-vnoremap <leader>ll y :Lines <C-R>"<CR>
-
 " Fuzzy search in all files in current directory
 noremap <leader>r :Rg<CR>
-" Fuzzy search for word under cursor in all files in current directory
-nnoremap <leader>rr :Rg <C-R><C-W><CR>
-" Fuzzy search for selected in all files in current directory
-vnoremap <leader>rr y :Rg <C-R>"<CR>
-
-" Fuzzy search in tags
-noremap <leader>t :Tags<CR>
-" Fuzzy search for word under cursor in tags
-nnoremap <leader>tt :Tags <C-R><C-W><CR>
-" Fuzzy search for selected in tags
-vnoremap <leader>tt y :Tags <C-R>"<CR>
-
-" Fuzzy search in all files names in history
-noremap <leader>h :History<CR>
-" Fuzzy search in all open buffer names
-noremap <leader>b :Buffers<CR>
-" Fuzzy search in all window buffer names
-noremap <leader>w :Windows<CR>
-" Fuzzy search in all changed file names
-noremap <leader>g :GFiles?<CR>
-" Fuzzy search in all Help docs
-noremap <leader>? :Helptags<CR>
 " Fuzzy search in all commands
 noremap <leader>c :Commands<CR>
 
 " }}}
 
 " -----------------------------------------------------------------------
-" Incsearch {{{
-" -----------------------------------------------------------------------
-let g:incsearch#auto_nohlsearch = 1
-
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
-map n  <Plug>(incsearch-nohl-n)
-map N  <Plug>(incsearch-nohl-N)
-map *  <Plug>(incsearch-nohl-*)
-map #  <Plug>(incsearch-nohl-#)
-map g* <Plug>(incsearch-nohl-g*)
-map g# <Plug>(incsearch-nohl-g#)
-
-" }}}
-
-" -----------------------------------------------------------------------
-" Indent Line {{{
-" -----------------------------------------------------------------------
-let g:indentLine_setColors = 1
-let g:indentLine_enabled = 0
-
-" }}}
-
-" -----------------------------------------------------------------------
 " Mappings {{{
 " -----------------------------------------------------------------------
-" autocompletion
-nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 
 " Edit vimrc and apply changes
 nnoremap <leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
-
-" Change two vertically split windows to horizonally split
-map <leader>vh <C-W>t<C-W>K
-
-" Change two horizonally split windows to vertically split
-map <leader>hv <C-W>t<C-W>H
 
 " Trim trailing whitespace
 map <leader>ws :%s/\s\+$//e<CR>
