@@ -114,6 +114,8 @@ xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
 " Fuzzy search in all files names in current directory
 noremap <leader>f :Files<CR>
+" Fuzzy search in all edited files names in current git directory
+noremap <leader>g :GFiles?<CR>
 " Fuzzy search in all files in current directory
 noremap <leader>r :Rg<CR>
 " Fuzzy search in all commands
