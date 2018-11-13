@@ -39,25 +39,24 @@ bindkey '^E' autosuggest-execute
 
 source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-magic-enter () {
-  # If commands are not already set, use the defaults
-  [ -z "$MAGIC_ENTER_GIT_COMMAND" ] && MAGIC_ENTER_GIT_COMMAND="clear && git status -sb ."
-  [ -z "$MAGIC_ENTER_OTHER_COMMAND" ] && MAGIC_ENTER_OTHER_COMMAND="clear && ls -lh ."
+# magic-enter () {
+#   # If commands are not already set, use the defaults
+#   [ -z "$MAGIC_ENTER_GIT_COMMAND" ] && MAGIC_ENTER_GIT_COMMAND="clear && git status -sb ."
+#   [ -z "$MAGIC_ENTER_OTHER_COMMAND" ] && MAGIC_ENTER_OTHER_COMMAND="clear && ls -lh ."
 
-  if [[ -z $BUFFER ]]; then
-    echo ""
-    if git rev-parse --is-inside-work-tree &>/dev/null; then
-      eval "$MAGIC_ENTER_GIT_COMMAND"
-      zle accept-line
-    else
-      eval "$MAGIC_ENTER_OTHER_COMMAND"
-      zle accept-line
-    fi
-    # zle redisplay
-  else
-    zle accept-line
-  fi
-}
-zle -N magic-enter
-bindkey "^M" magic-enter
+#   if [[ -z $BUFFER ]]; then
+#     if git rev-parse --is-inside-work-tree &>/dev/null; then
+#       eval "$MAGIC_ENTER_GIT_COMMAND"
+#       zle accept-line
+#     else
+#       eval "$MAGIC_ENTER_OTHER_COMMAND"
+#       zle accept-line
+#     fi
+#     zle redisplay
+#   else
+#     # zle accept-line
+#   fi
+# }
+# zle -N magic-enter
+# bindkey "^M" magic-enter
 
