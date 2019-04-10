@@ -39,6 +39,6 @@ function wf_new_branch() {
     fi
 
     git checkout -b $1
-    # git push -u origin $1
+    git push -u origin "$1"
 }
 
