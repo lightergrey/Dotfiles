@@ -28,13 +28,14 @@ function wf_new_branch() {
     echo "Making branch $1"
 
     wf_is_branch_clean
-    if [ $? == 0 ]; then
-        return 0
+    if [ $? -ne 0 ]; then
+        return 1
     fi
 
+
     wf_is_branch_master
-    if [ $? == 0 ]; then
-        return 0
+    if [ $? -ne  0 ]; then
+        return 1
     fi
 
     git checkout -b $1
