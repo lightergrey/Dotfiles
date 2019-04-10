@@ -4,6 +4,7 @@ function wf_is_branch_clean() {
     if [[ -z $(git status -s) ]]; then
         return 0
     else
+        echo "branch not clean"
         return 1
     fi
 }
@@ -13,6 +14,7 @@ function wf_is_branch_master() {
     if [[ $branch = 'master' ]]; then
         return 0
     else
+        echo "branch not master"
         return 1
     fi
 }
@@ -25,5 +27,5 @@ function wf_new_branch() {
 
     echo "Making branch $1"
     git checkout -b $1
-    git push -u origin HEAD
+    git push -u origin $1
 }
