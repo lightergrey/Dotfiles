@@ -21,7 +21,7 @@ function wf_is_branch_master() {
 }
 
 function wf_checkout_branch() {
-    if [ "$#" -ne 1 ]; then
+    if [[ "$#" -ne 1 ]]; then
         echo "Check out branch. Usage: $0 [branch-name]"
         return 1
     fi
@@ -30,7 +30,7 @@ function wf_checkout_branch() {
 
     git fetch
     git checkout $1
-    if [ $? -ne 0]; then
+    if [[ $? -ne 0 ]]; then
         echo "Error: check out branch"
         return 1
     else
@@ -39,7 +39,7 @@ function wf_checkout_branch() {
 }
 
 function wf_new_branch() {
-    if [ "$#" -ne 1 ]; then
+    if [[ "$#" -ne 1 ]]; then
         echo "Create a new branch on both the VM and locally. Usage: $0 [branch-name]"
         return 1
     fi
@@ -53,7 +53,7 @@ function wf_new_branch() {
 
 
     wf_is_branch_master
-    if [ $? -ne  0 ]; then
+    if [[ $? -ne  0 ]]; then
         return 1
     fi
 
