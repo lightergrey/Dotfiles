@@ -61,6 +61,6 @@ function wf_new_branch() {
     git checkout -b $1
     git push -u origin "$1"
 
-    ssh -T $VM_HOST "cd $REPO_DIR && wf_checkout_branch $1"
+    ssh -T $VM_HOST "cd $REPO_DIR && . ~/.zsh/etsy-workflow-functions.zsh && wf_checkout_branch $1"
 }
 
