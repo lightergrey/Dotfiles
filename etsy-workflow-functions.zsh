@@ -26,6 +26,18 @@ function wf_new_branch() {
     fi
 
     echo "Making branch $1"
+
+    wf_is_branch_clean
+    if [ $? == 0 ]; then
+        return 0
+    fi
+
+    wf_is_branch_master
+    if [ $? == 0 ]; then
+        return 0
+    fi
+
     git checkout -b $1
-    git push -u origin $1
+    # git push -u origin $1
 }
+
