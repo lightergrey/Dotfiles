@@ -1,4 +1,5 @@
 export VM_HOST=jstewart.vm.dev.etsycloud.com
+export REPO_DIR="~/development/workflow-testing"
 
 function wf_is_branch_clean() {
     if [[ -z $(git status -s) ]]; then
@@ -60,6 +61,6 @@ function wf_new_branch() {
     git checkout -b $1
     git push -u origin "$1"
 
-    ssh -T $VM_HOST "wf_checkout_branch $1"
+    ssh -T $VM_HOST "cd $REPO_DIR && wf_checkout_branch $1"
 }
 
