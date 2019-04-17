@@ -58,3 +58,5 @@ magic-enter () {
 }
 zle -N magic-enter
 bindkey "^M" magic-enter
+
+ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(magic-enter)

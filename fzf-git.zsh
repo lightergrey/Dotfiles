@@ -29,7 +29,7 @@ gb() {
   git branch -a --color=always | grep -v '/HEAD\s' | sort |
   fzf-down --ansi --multi --tac |
   sed 's/^..//' | cut -d' ' -f1 |
-  sed 's#^remotes/##'
+  sed "s#remotes/[^/]*/##"
 }
 
 gh() {
