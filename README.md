@@ -11,7 +11,7 @@
 - Symlink `vimrc`: `ln -s ~/development/dotfiles/vimrc ~/.vimrc`
 - Install [vim-plug](https://github.com/junegunn/vim-plug#installation)
 - Install plugins in Vim: `:PlugInstall`
-- Install ripgrep:
+- Install ripgrep: _(Not strictly necessary as this was intended for use in vim)_
   - `sudo yum-config-manager --add-repo=https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-7/carlwgeorge-ripgrep-epel-7.repo`
   - `sudo yum install ripgrep`
   - `brew install ripgrep`
