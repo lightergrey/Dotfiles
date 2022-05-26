@@ -101,7 +101,7 @@ let g:ale_sign_column_always = 1
 " Colorscheme {{{
 " -----------------------------------------------------------------------
 call matchadd('ColorColumn', '\%81v', 100)
-colorscheme base16-onedark
+" colorscheme base16-onedark
 
 " -----------------------------------------------------------------------
 " FZF - Fuzzy File {{{
