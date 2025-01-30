@@ -9,7 +9,7 @@ bindkey -v
 
 export EDITOR="vim"
 export AUTOSSH_GATETIME=0
-setopt hist_ignore_all_dups inc_append_history
+setopt hist_ignore_all_dups inc_append_history hist_find_no_dups
 HISTFILE=~/.zsh_history
 HISTSIZE=4096
 SAVEHIST=4096
@@ -22,7 +22,6 @@ prompt pure
 autoload -U compinit; compinit
 
 # Aiases
-alias vm="~/smux jstewart.vm.ny5.etsy.com"
 alias xdebugoff='sudo sed -i '\''s/.*zend_extension.*/; zend_extension="\/usr\/lib64\/php\/modules8\/xdebug\.so"/'\'' /etc/php8/php.d/xdebug.ini; sudo systemctl restart httpd'
 alias xdebugon='sudo sed -i '\''s/.*zend_extension.*/zend_extension="\/usr\/lib64\/php\/modules8\/xdebug\.so"/'\'' /etc/php8/php.d/xdebug.ini; sudo systemctl restart httpd'
 alias xdebugstatus='grep '\''; zend_extension="\/usr\/lib64\/php\/modules8\/xdebug\.so"'\'' /etc/php8/php.d/xdebug.ini >/dev/null && echo "xdebug is off" || echo "xdebug is on"'
@@ -42,6 +41,7 @@ bindkey '^F' forward-word
 bindkey '^E' autosuggest-execute
 
 source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.zsh/fzf-tab/fzf-tab.plugin.zsh
 
 # Magic Enter
 magic-enter () {
@@ -64,3 +64,8 @@ zle -N magic-enter
 bindkey "^M" magic-enter
 
 ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(magic-enter)
+
+LC_CTYPE=en_US.UTF-8
+LC_ALL=en_US.UTF-8
+
+export LC_ALL=en_US.UTF-8
