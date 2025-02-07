@@ -15,6 +15,8 @@ HISTSIZE=4096
 SAVEHIST=4096
 
 # Prompt setup
+# .zshrc
+fpath+=($HOME/.zsh/pure)
 autoload -U promptinit; promptinit
 prompt pure
 
@@ -22,12 +24,10 @@ prompt pure
 autoload -U compinit; compinit
 
 # Aiases
-alias xdebugoff='sudo sed -i '\''s/.*zend_extension.*/; zend_extension="\/usr\/lib64\/php\/modules8\/xdebug\.so"/'\'' /etc/php8/php.d/xdebug.ini; sudo systemctl restart httpd'
-alias xdebugon='sudo sed -i '\''s/.*zend_extension.*/zend_extension="\/usr\/lib64\/php\/modules8\/xdebug\.so"/'\'' /etc/php8/php.d/xdebug.ini; sudo systemctl restart httpd'
-alias xdebugstatus='grep '\''; zend_extension="\/usr\/lib64\/php\/modules8\/xdebug\.so"'\'' /etc/php8/php.d/xdebug.ini >/dev/null && echo "xdebug is off" || echo "xdebug is on"'
-alias yarn='yarnpkg'
-alias bat="/usr/local/bat/bat"
-alias delta="/usr/local/delta/delta"
+#alias vm="~/smux jstewart.vm.ny5.etsy.com"
+#alias xdebugoff='sudo sed -i '\''s/.*zend_extension.*/; zend_extension="\/usr\/lib64\/php\/modules7\/xdebug\.so"/'\'' /etc/php7/php.d/xdebug.ini; sudo systemctl restart httpd'
+#alias xdebugon='sudo sed -i '\''s/.*zend_extension.*/zend_extension="\/usr\/lib64\/php\/modules7\/xdebug\.so"/'\'' /etc/php7/php.d/xdebug.ini; sudo systemctl restart httpd'
+#alias xdebugstatus='grep '\''; zend_extension="\/usr\/lib64\/php\/modules7\/xdebug\.so"'\'' /etc/php7/php.d/xdebug.ini >/dev/null && echo "xdebug is off" || echo "xdebug is on"'
 
 # FZF Fuzzy Finder
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -69,3 +69,7 @@ LC_CTYPE=en_US.UTF-8
 LC_ALL=en_US.UTF-8
 
 export LC_ALL=en_US.UTF-8
+
+eval `ssh-agent -s`
+ssh-add ~/.ssh/id_ed25519_github
+
