@@ -70,6 +70,7 @@ LC_ALL=en_US.UTF-8
 
 export LC_ALL=en_US.UTF-8
 
-eval `ssh-agent -s`
-ssh-add ~/.ssh/id_ed25519_github
+#eval `ssh-agent -s`
+#ssh-add ~/.ssh/id_ed25519_github
+{ eval `ssh-agent`; ssh-add ~/.ssh/id_ed25519_github; } &>/dev/null
 

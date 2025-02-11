@@ -4,10 +4,15 @@
 # [[ $- == *i* ]] || return
 
 # Use zsh
-if [ "$SHELL" != "/usr/bin/zsh" ]
-then
-    export SHELL="/usr/bin/zsh"
-    exec /usr/bin/zsh
+#if [ "$SHELL" != "/usr/bin/zsh" ]
+#then
+#    export SHELL="/usr/bin/zsh"
+#    exec /usr/bin/zsh
+#fi
+# Check if the current shell is not zsh and if the shell is interactive
+if [ "$SHELL" != "/usr/bin/zsh" ] && [ -t 0 ]; then
+  export SHELL="usr/bin/zsh"
+  exec /usr/bin/zsh
 fi
 
 # starting ssh agent
