@@ -16,6 +16,17 @@ fzf-down() {
       --bind='alt-j:preview-down'
 }
 
+# gbd - interactive git branch deletion
+# based off https://www.peterp.me/articles/cli-tips-interactive-branch-delete/
+# use tab to select multiple
+# Drop this in your .bashrc or .zshrc (assumes fzf is installed)
+gbd() {
+  local branches branch
+  branches=$(git for-each-ref --sort=-committerdate refs/heads/ --format="[%(committerdate:short)] %(color:bold green)%(refname:short)%(color:reset) - %(contents:subject)" --color=always | egrep -v main) &&
+  branch=$(echo "$branches" | fzf --multi --ansi --preview 'git show {2}' ) &&
+  git branch -D $(echo "$branch" | awk '{print $2}')
+}
+
 gf() {
   is_in_git_repo || return
   git -c color.status=always status --short |
@@ -30,15 +41,6 @@ gb() {
   fzf-down --ansi --multi --tac |
   sed 's/^..//' | cut -d' ' -f1 |
   sed "s#remotes/[^/]*/##"
-}
-
-gh() {
-  is_in_git_repo || return
-  git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
-  fzf-down --no-sort --reverse --bind 'ctrl-s:toggle-sort' \
-    --header 'Press CTRL-S to toggle sort' \
-    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always | head -'$LINES |
-  grep -o "[a-f0-9]\{7,\}"
 }
 
 join-lines() {
@@ -56,5 +58,5 @@ bind-git-helper() {
     eval "bindkey '^g^$c' fzf-g$c-widget"
   done
 }
-bind-git-helper f b h
+bind-git-helper f b
 unset -f bind-git-helper
