@@ -43,15 +43,6 @@ gb() {
   sed "s#remotes/[^/]*/##"
 }
 
-#gh() {
-#  is_in_git_repo || return
-#  git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
-#  fzf-down --no-sort --reverse --bind 'ctrl-s:toggle-sort' \
-#    --header 'Press CTRL-S to toggle sort' \
-#    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always | head -'$LINES |
-#  grep -o "[a-f0-9]\{7,\}"
-#}
-
 join-lines() {
   local item
   while read item; do
