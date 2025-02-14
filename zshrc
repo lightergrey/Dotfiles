@@ -1,6 +1,11 @@
 #!/bin/zsh
 
-export PATH=$HOME/opt/bin:$HOME/bin:/usr/local/bin:/usr/local/sbin:$HOME/.composer/vendor/bin:$PATH
+#export PATH=$HOME/opt/bin:$HOME/bin:/usr/local/bin:/usr/local/sbin:$HOME/.composer/vendor/bin:$PATH
+
+export NVM_DIR="$HOME/.nvm"
+  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
 setopt auto_cd
 unsetopt correct_all
 
@@ -22,12 +27,12 @@ prompt pure
 autoload -U compinit; compinit
 
 # Aiases
-alias xdebugoff='sudo sed -i '\''s/.*zend_extension.*/; zend_extension="\/usr\/lib64\/php\/modules8\/xdebug\.so"/'\'' /etc/php8/php.d/xdebug.ini; sudo systemctl restart httpd'
-alias xdebugon='sudo sed -i '\''s/.*zend_extension.*/zend_extension="\/usr\/lib64\/php\/modules8\/xdebug\.so"/'\'' /etc/php8/php.d/xdebug.ini; sudo systemctl restart httpd'
-alias xdebugstatus='grep '\''; zend_extension="\/usr\/lib64\/php\/modules8\/xdebug\.so"'\'' /etc/php8/php.d/xdebug.ini >/dev/null && echo "xdebug is off" || echo "xdebug is on"'
-alias yarn='yarnpkg'
-alias bat="/usr/local/bat/bat"
-alias delta="/usr/local/delta/delta"
+#alias xdebugoff='sudo sed -i '\''s/.*zend_extension.*/; zend_extension="\/usr\/lib64\/php\/modules8\/xdebug\.so"/'\'' /etc/php8/php.d/xdebug.ini; sudo systemctl restart httpd'
+#alias xdebugon='sudo sed -i '\''s/.*zend_extension.*/zend_extension="\/usr\/lib64\/php\/modules8\/xdebug\.so"/'\'' /etc/php8/php.d/xdebug.ini; sudo systemctl restart httpd'
+#alias xdebugstatus='grep '\''; zend_extension="\/usr\/lib64\/php\/modules8\/xdebug\.so"'\'' /etc/php8/php.d/xdebug.ini >/dev/null && echo "xdebug is off" || echo "xdebug is on"'
+#alias yarn='yarnpkg'
+#alias bat="/usr/local/bat/bat"
+#alias delta="/usr/local/delta/delta"
 
 # FZF Fuzzy Finder
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -69,3 +74,9 @@ LC_CTYPE=en_US.UTF-8
 LC_ALL=en_US.UTF-8
 
 export LC_ALL=en_US.UTF-8
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/jstewart/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/jstewart/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/jstewart/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/jstewart/google-cloud-sdk/completion.zsh.inc'; fi
