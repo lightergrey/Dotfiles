@@ -12,4 +12,4 @@
 - clone this repo `git clone https://github.com/lightergrey/Dotfiles.git ~/development/`
 - Symlink `.bashrc`: `ln -s ~/development/Dotfiles/bashrc ~/.bashrc`
 - Symlink `.zshrc`: `ln -s ~/development/Dotfiles/zshrc ~/.zshrc`
-- Install fzf `~/development/Dotfiles/fzf/install`
+- Install fzf `~/development/Dotfiles/submodules/fzf/install`

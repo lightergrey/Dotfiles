@@ -24,7 +24,7 @@ autoload -U promptinit; promptinit
 prompt pure
 
 # FZF Fuzzy Finder
-[ -f ~/development/Dotfiles/submodules/fzf/.fzf.zsh ] && source ~/development/Dotfiles/submodules/fzf/.fzf.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # FZF Git functions
 source ~/development/Dotfiles/zsh/fzf-git.zsh
@@ -33,6 +33,11 @@ source ~/development/Dotfiles/zsh/fzf-git.zsh
 source ~/development/Dotfiles/submodules/zsh-autosuggestions/zsh-autosuggestions.zsh
 bindkey '^F' forward-word
 bindkey '^E' autosuggest-execute
+
+# Add xdebug aliases (VM only)
+if [[ $(uname) != "Darwin" ]]; then
+  source ~/development/bin/xdebug_toggle
+fi
 
 # Syntax highlighting
 source ~/development/Dotfiles/submodules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
