@@ -10,6 +10,7 @@
 ## Setup:
 
 - clone this repo `git clone https://github.com/lightergrey/Dotfiles.git ~/development/`
-- Symlink `.bashrc`: `ln -s ~/development/Dotfiles/bashrc ~/.bashrc`
+- run `git submodule init` and `git submodule update`
+- Symlink `.profile`: `ln -s ~/development/Dotfiles/profile ~/.profile`
 - Symlink `.zshrc`: `ln -s ~/development/Dotfiles/zshrc ~/.zshrc`
 - Install fzf `~/development/Dotfiles/submodules/fzf/install`
